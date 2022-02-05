@@ -4,22 +4,27 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    public static PlayerControl player;
+
     // Mouse settings
     public float mouseSensitivity = 5.0f;
 
     // Used to control player movement
     public CharacterController controller;
     public float moveSpeed = 10.0f; // Arbitrary default value
+    public float rotateSpeed = 3.0f; // Arbitrary default value
 
     // Used for throwing the ball
     public GameObject ballPrefab;
     public Vector3 throwVector = new Vector3(0, 10, 20); // Arbitrary default value
-    public GameObject currentBall;
+    private GameObject currentBall;
     private bool throwing = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        player = this;
+
         // Try to find the CharacterController if necessary
         if (controller == null)
         {
@@ -54,6 +59,11 @@ public class PlayerControl : MonoBehaviour
         {
             throwing = true;
         }
+
+        // TODO: Camera rotation
+
+        float yRotation = Input.GetAxis("Turn") * rotateSpeed;
+        gameObject.transform.localRotation *= Quaternion.Euler(0f, yRotation, 0f);
     }
 
     private void FixedUpdate()
@@ -69,6 +79,26 @@ public class PlayerControl : MonoBehaviour
 
             // currentBall == null when this ball destroys itself
         }
+    }
+
+    public void Teleport(GameObject teammate)
+    {
+        // Get the new position of the player
+        Vector3 teamPosition = teammate.transform.position;
+        Vector3 currPosition = gameObject.transform.position;
+        Quaternion currRotation = gameObject.transform.rotation;
+
+        // Destroy the teammate object (so we don't teleport on top)
+        Destroy(teammate);
+
+        // Disable character controller for teleport
+        controller.enabled = false;
+
+        // Set our new position to replace the teammate
+        gameObject.transform.SetPositionAndRotation(new Vector3(teamPosition.x, currPosition.y, teamPosition.z), currRotation);
+
+        // Re-enable character controller after teleport
+        controller.enabled = true;
     }
 
     // TODO: When the player clicks on a part of the screen, use raycast to get direction,

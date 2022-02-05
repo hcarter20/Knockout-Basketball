@@ -25,11 +25,12 @@ public class Throwable : MonoBehaviour
         // Re-activate physics
         rb.isKinematic = false;
 
+        // Apply physics force to the ball
+        //rb.AddForce(throwVector, ForceMode.VelocityChange);
+        rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
+
         // Remove control of the game object from player
         transform.parent = null;
-
-        // Apply physics force to the ball
-        rb.AddForce(throwVector, ForceMode.VelocityChange);
 
         // Start countdown timer for self-destruct
         StartCoroutine(SelfDestruct());
