@@ -13,7 +13,9 @@ public class PlayerControl : MonoBehaviour
 
     // Used for throwing the ball
     public GameObject ballPrefab;
-    public float throwSpeed = 10.0f; // Arbitrary default value
+    public Vector3 throwVector = new Vector3(0, 10, 20); // Arbitrary default value
+    public GameObject currentBall;
+    private bool throwing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -41,9 +43,33 @@ public class PlayerControl : MonoBehaviour
 
         // Use the CharacterController to move the player
         controller.Move(playerMove * Time.deltaTime);
+
+        // Check if we need a new basketball
+        if (currentBall == null)
+        {
+            currentBall = Instantiate(ballPrefab, transform);
+        }
+        // Check if the player wants to throw the ball
+        else if (Input.GetButtonDown("Fire"))
+        {
+            throwing = true;
+        }
     }
 
+    private void FixedUpdate()
+    {
+        if (throwing)
+        {
+            // Deactivate the throwing flag
+            throwing = false;
 
+            // Throw the basketball by calling its script
+            Throwable throwScript = currentBall.GetComponent<Throwable>();
+            throwScript.Throw(throwVector);
+
+            // currentBall == null when this ball destroys itself
+        }
+    }
 
     // TODO: When the player clicks on a part of the screen, use raycast to get direction,
     // then spawn a basketball and apply force to send it in that direction.
