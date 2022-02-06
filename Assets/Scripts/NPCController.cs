@@ -7,13 +7,21 @@ public class NPCController : MonoBehaviour
     // The rigidbody attached to this game object
     public Rigidbody rb;
 
+    // The NPCMovement script attached to this game object
+    public NPCMovement moveScript;
+
     void Start()
     {
-        // Try to find the Rigidbody component if necessary
+        // Try to find components if necessary
         if (rb == null)
         {
             Debug.LogError("You forgot to add the npc's rigidbody.");
             rb = GetComponent<Rigidbody>();
+        }
+        if (moveScript == null)
+        {
+            Debug.LogError("You forgot to add the npc's movement script.");
+            moveScript = GetComponent<NPCMovement>();
         }
     }
 
@@ -21,7 +29,10 @@ public class NPCController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
+            // NPC should stop moving (TODO: Is this the best approach?)
+            Destroy(moveScript);
 
+            // TODO: Should the NPC disappear after a while?
         }
     }
 }

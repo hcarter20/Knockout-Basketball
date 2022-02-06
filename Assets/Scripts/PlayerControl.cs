@@ -63,7 +63,7 @@ public class PlayerControl : MonoBehaviour
         // TODO: Camera rotation
 
         float yRotation = Input.GetAxis("Turn") * rotateSpeed;
-        gameObject.transform.localRotation *= Quaternion.Euler(0f, yRotation, 0f);
+        transform.localRotation *= Quaternion.Euler(0f, yRotation, 0f);
     }
 
     private void FixedUpdate()
@@ -95,7 +95,7 @@ public class PlayerControl : MonoBehaviour
         controller.enabled = false;
 
         // Set our new position to replace the teammate
-        gameObject.transform.SetPositionAndRotation(new Vector3(teamPosition.x, currPosition.y, teamPosition.z), currRotation);
+        transform.SetPositionAndRotation(new Vector3(teamPosition.x, currPosition.y, teamPosition.z), currRotation);
 
         // Re-enable character controller after teleport
         controller.enabled = true;
