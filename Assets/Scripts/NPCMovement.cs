@@ -27,13 +27,13 @@ public class NPCMovement : MonoBehaviour
         Vector3 destPoint = left ? leftPoint : rightPoint;
 
         // Are we at the destination yet?
-        if (transform.position == destPoint)
+        if (AtPoint(destPoint))
         {
             // Start going the other direction
             left = !left;
 
             // Generate a random pause timing for motion (so not all on a cycle)
-            hesitanceTime = Random.Range(0.005f, 0.02f);
+            hesitanceTime = Random.Range(0.05f, 0.2f);
 
             // Pause for a random amount of time (fixed for npc)
             StartCoroutine(PauseMotion());
@@ -46,6 +46,13 @@ public class NPCMovement : MonoBehaviour
             // Continue moving towards our destination
             transform.position = Vector3.MoveTowards(transform.position, destPoint, moveSpeed * Time.deltaTime);
         }
+    }
+
+    private bool AtPoint(Vector3 point)
+    {
+        // Check if we're at the destination, within a rounding error
+        float err = 0.001f;
+        return Mathf.Abs(transform.position.x - point.x) < err && Mathf.Abs(transform.position.y - point.y) < err;
     }
 
     private IEnumerator PauseMotion()
