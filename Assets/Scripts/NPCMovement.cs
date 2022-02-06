@@ -9,8 +9,10 @@ public class NPCMovement : MonoBehaviour
     public Transform leftTransform, rightTransform;
     // The two bound points that the npc moves between
     public Vector3 leftPoint, rightPoint;
+    
     // Which direction it is currently going
     private bool left = true;
+
     // How quickly the NPC moves
     public float moveSpeed = 2.0f; // Arbitrary default value
     private float hesitanceTime;

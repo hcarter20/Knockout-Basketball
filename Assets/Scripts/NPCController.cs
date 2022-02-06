@@ -32,10 +32,12 @@ public class NPCController : MonoBehaviour
             // NPC should stop moving (TODO: Is this the best approach?)
             Destroy(moveScript);
 
-            // TODO: Should the NPC disappear after a while?
-
             // TODO: Should the ball disappear, or at least not be able to pass to teammate?
             // Or is it funnier if you can pass to a teammate by bouncing off an NPC?
+            Destroy(collision.gameObject);
+
+            // TODO: Should the NPC disappear after a while?
+
         }
     }
 }

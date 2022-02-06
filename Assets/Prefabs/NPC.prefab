@@ -197,13 +197,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7843098687317808262}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eac409340cdd1384a930e41221b8d3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftTransform: {fileID: 7566451886969035053}
   rightTransform: {fileID: 5831842868781209011}
-  leftPoint: {x: -3, y: 1, z: -5}
-  rightPoint: {x: -3, y: 1, z: -5}
+  leftPoint: {x: -4.95, y: 1, z: -6.5}
+  rightPoint: {x: -2.85, y: 1, z: -6.5}
   moveSpeed: 2
