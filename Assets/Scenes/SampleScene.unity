@@ -1109,6 +1109,13 @@ MonoBehaviour:
   rotateSpeed: 5
   ballPrefab: {fileID: 9121507428848948023, guid: 6d450836ecb05ac44b451879bece9116, type: 3}
   throwVector: {x: 0, y: 3, z: 15}
+  lowPosition: {x: 0, y: -0.8, z: 1}
+  midPosition: {x: 0, y: -0.4, z: 1.5}
+  highPosition: {x: 0, y: 0.5, z: 1.7}
+  leftPosition: {x: -0.6, y: 0, z: 0}
+  rightPosition: {x: 0.6, y: 0, z: 0}
+  currentHeight: 0
+  currentSide: 0
 --- !u!143 &1662416149
 CharacterController:
   m_ObjectHideFlags: 0

@@ -46,4 +46,10 @@ public class Throwable : MonoBehaviour
         // Destroy this game object
         Destroy(gameObject);
     }
+
+    public void OnDestroy()
+    {
+        // Tell the player to spawn a new ball
+        PlayerControl.player.SpawnBall();
+    }
 }

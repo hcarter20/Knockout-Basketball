@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    // Used below for choosing ball position, relative to camera
+    public enum ShootHeight { High, Mid, Low };
+    // public enum ShootSide { Left, Mid, Right };
+
+    // Only ever one player in a scene, so static access from other classes
     public static PlayerControl player;
 
     // Mouse settings
@@ -20,6 +25,18 @@ public class PlayerControl : MonoBehaviour
     private GameObject currentBall;
     private bool throwing = false;
 
+    // Position of the ball relative to player camera based on mode
+    // These are default values, otherwise customize through the editor
+    public Vector3 lowPosition = new Vector3(0.0f, -0.8f, 1f);
+    public Vector3 midPosition = new Vector3(0.0f, -0.4f, 1.5f);
+    public Vector3 highPosition = new Vector3(0.0f, 0.5f, 1.7f);
+    // public Vector3 leftPosition = new Vector3(-0.6f, 0.0f, 0.0f);
+    // public Vector3 rightPosition = new Vector3(0.6f, 0.0f, 0.0f);
+
+    // Current ball position, represented as a mode (choice of target)
+    public ShootHeight currentHeight;
+    // public ShootSide currentSide;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,12 +48,26 @@ public class PlayerControl : MonoBehaviour
             Debug.LogError("You forgot to add the player's character controller.");
             controller = GetComponent<CharacterController>();
         }
+
+        // Spawn the ball manually at the start
+        SpawnBall();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // TODO: Consider shifting the actual movement to FixedUpdate (for physics interactions)
+        // TODO: Consider moving to FixedUpdate for performance?
+
+        // Update the player's movement, based on keyboard input
+        UpdateMovement();
+
+        // Check ball positioning input
+        if (currentBall != null)
+            UpdateBall();
+    }
+
+    private void UpdateMovement()
+    {
         // Move the character based on keyboard input
         // Get the player's movement input (through the keyboard)
         float xMove = Input.GetAxis("Horizontal") * moveSpeed;
@@ -49,19 +80,7 @@ public class PlayerControl : MonoBehaviour
         // Use the CharacterController to move the player
         controller.Move(playerMove * Time.deltaTime);
 
-        // Check if we need a new basketball
-        if (currentBall == null)
-        {
-            currentBall = Instantiate(ballPrefab, transform);
-        }
-        // Check if the player wants to throw the ball
-        else if (Input.GetButtonDown("Fire"))
-        {
-            throwing = true;
-        }
-
-        // TODO: Camera rotation
-
+        // TODO: Camera rotation (limit rotation?)
         float yRotation = Input.GetAxis("Turn") * rotateSpeed;
         transform.localRotation *= Quaternion.Euler(0f, yRotation, 0f);
     }
@@ -77,8 +96,61 @@ public class PlayerControl : MonoBehaviour
             Throwable throwScript = currentBall.GetComponent<Throwable>();
             throwScript.Throw(throwVector);
 
-            // currentBall == null when this ball destroys itself
+            // This ball will prompt us to spawn a new one when it destroys itself
+            currentBall = null;
         }
+    }
+
+    private void UpdateBall()
+    {
+        // Check if the player wants to throw the ball
+        if (Input.GetButtonDown("Fire"))
+            throwing = true;
+        else
+        {
+            // Get input on the arrows keys to indicate position swap
+            // float vertArrow = Input.GetAxisRaw("VerticalAlt");
+            
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                if (currentHeight == ShootHeight.High)
+                {
+                    currentHeight = ShootHeight.Mid;
+                    currentBall.transform.localPosition = midPosition;
+                }
+                else  if (currentHeight == ShootHeight.Mid)
+                {
+                    currentHeight = ShootHeight.Low;
+                    currentBall.transform.localPosition = lowPosition;
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if (currentHeight == ShootHeight.Low)
+                {
+                    currentHeight = ShootHeight.Mid;
+                    currentBall.transform.localPosition = midPosition;
+                }
+                else if (currentHeight == ShootHeight.Mid)
+                {
+                    currentHeight = ShootHeight.High;
+                    currentBall.transform.localPosition = highPosition;
+                }
+            }
+
+            // TODO: Do we want to allow horizontal positioning?
+            //float horizArrow = Input.GetAxisRaw("HorizontalAlt");
+        }
+    }
+
+    public void SpawnBall()
+    {
+        // First, instantiate a new instance from the prefab
+        currentBall = Instantiate(ballPrefab, transform);
+
+        // By default, start out of view (bottom of the screen)
+        currentHeight = ShootHeight.Low;
+        currentBall.transform.localPosition = lowPosition;
     }
 
     public void Teleport(GameObject teammate)
