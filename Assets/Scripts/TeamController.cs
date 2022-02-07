@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TeamController : MonoBehaviour
 {
+    // Used to keep track of which teammate this is
+    public int id;
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ball"))
@@ -15,7 +18,7 @@ public class TeamController : MonoBehaviour
             PlayerControl.player.Teleport(gameObject);
 
             // Tell the GameManager to activate the next row
-            GameManager.S.BeginNextSection();
+            GameManager.S.BeginNextSection(id);
         }
     }
 }

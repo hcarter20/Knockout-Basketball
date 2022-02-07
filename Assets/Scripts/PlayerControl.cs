@@ -6,7 +6,6 @@ public class PlayerControl : MonoBehaviour
 {
     // Used below for choosing ball position, relative to camera
     public enum ShootHeight { High, Mid, Low };
-    // public enum ShootSide { Left, Mid, Right };
 
     // Only ever one player in a scene, so static access from other classes
     public static PlayerControl player;
@@ -21,21 +20,27 @@ public class PlayerControl : MonoBehaviour
 
     // Used for throwing the ball
     public GameObject ballPrefab;
-    public Vector3 throwVector = new Vector3(0, 10, 20); // Arbitrary default value
+    public Vector3 lowThrowVector = new Vector3(0.0f, 1.0f, 4.0f); // Arbitrary default value
+    public Vector3 midThrowVector = new Vector3(0.0f, 1.0f, 1.0f); // Arbitrary default value
+    public Vector3 highThrowVector = new Vector3(0.0f, 2.0f, 1.0f); // Arbitrary default value
     private GameObject currentBall;
+    // Set when the ball is about to be thrown
     private bool throwing = false;
+    // Speed of the power meter (angle of the ball)
+    public float meterSpeed = 1.0f; // Arbitrary default value
+    public float throwSpeed = 8.0f; // Arbitrary default value
+    public float minThrowSpeed = 5.0f; // Arbitrary default value
+    public float maxThrowSpeed = 8.0f; // Arbitrary default value
+    public bool lower = true;
 
     // Position of the ball relative to player camera based on mode
     // These are default values, otherwise customize through the editor
     public Vector3 lowPosition = new Vector3(0.0f, -0.8f, 1f);
     public Vector3 midPosition = new Vector3(0.0f, -0.4f, 1.5f);
     public Vector3 highPosition = new Vector3(0.0f, 0.5f, 1.7f);
-    // public Vector3 leftPosition = new Vector3(-0.6f, 0.0f, 0.0f);
-    // public Vector3 rightPosition = new Vector3(0.6f, 0.0f, 0.0f);
 
     // Current ball position, represented as a mode (choice of target)
     public ShootHeight currentHeight;
-    // public ShootSide currentSide;
 
     // Start is called before the first frame update
     void Start()
@@ -94,7 +99,18 @@ public class PlayerControl : MonoBehaviour
 
             // Throw the basketball by calling its script
             Throwable throwScript = currentBall.GetComponent<Throwable>();
-            throwScript.Throw(throwVector);
+
+            // TODO: based on accuracy of power meter (somehow)
+            Vector3 throwVector = Vector3.zero;
+
+            if (currentHeight == ShootHeight.High)
+                throwVector = highThrowVector;
+            else if (currentHeight == ShootHeight.Mid)
+                throwVector = midThrowVector;
+            else if (currentHeight == ShootHeight.Low)
+                throwVector = lowThrowVector;
+
+            throwScript.Throw(throwVector.normalized * throwSpeed);
 
             // This ball will prompt us to spawn a new one when it destroys itself
             currentBall = null;
@@ -103,6 +119,15 @@ public class PlayerControl : MonoBehaviour
 
     private void UpdateBall()
     {
+        // TODO: Convert this to a power meter
+        // Update the current throw power
+        float goalThrowSpeed = lower ? minThrowSpeed : maxThrowSpeed;
+
+        if (Mathf.Abs(goalThrowSpeed - throwSpeed) < 0.1f)
+            lower = !lower;
+        else
+            throwSpeed = Mathf.MoveTowards(throwSpeed, goalThrowSpeed, meterSpeed * Time.deltaTime);
+
         // Check if the player wants to throw the ball
         if (Input.GetButtonDown("Fire"))
             throwing = true;

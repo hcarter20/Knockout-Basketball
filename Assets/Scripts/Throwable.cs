@@ -12,7 +12,7 @@ public class Throwable : MonoBehaviour
 
     void Start()
     {
-        // Try to find the Rigidbody component if necessary
+        // Try to find components if necessary
         if (rb == null)
         {
             Debug.LogError("You forgot to add the ball's rigidbody.");
@@ -22,11 +22,17 @@ public class Throwable : MonoBehaviour
 
     public void Throw(Vector3 throwVector)
     {
-        // Re-activate physics
+        // Determine the throw velocity to hit the target position
+        // Vector3 throwVector = CalculateForceVector(transform.position, targetPosition, throwForce);
+        // Debug.Log("Throw Vector from " + transform.position + " to " + targetPosition + " is " + throwVector);
+        // Vector3 targetDir = targetPosition - transform.position;
+        // float angle = Vector3.Angle(throwVector, transform.forward);
+        // Debug.Log(angle);
+
+        // Re-activate physics (this also re-activates gravity)
         rb.isKinematic = false;
 
         // Apply physics force to the ball
-        //rb.AddForce(throwVector, ForceMode.VelocityChange);
         rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
 
         // Remove control of the game object from player
@@ -51,5 +57,14 @@ public class Throwable : MonoBehaviour
     {
         // Tell the player to spawn a new ball
         PlayerControl.player.SpawnBall();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Hoop"))
+        {
+            // GOAL! Tell the GameManager we scored
+            GameManager.S.PlayerScored();
+        }
     }
 }

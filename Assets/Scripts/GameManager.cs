@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     // Section represents how far the player is from the hoop,
     // and how many points they get for a successful shot at this distance.
     public int section = 3;
+    public int score = 0;
 
     private void Awake()
     {
@@ -35,18 +36,26 @@ public class GameManager : MonoBehaviour
         ActivateRow(defenders1, null);
     }
 
+    /* When the player gets the ball through the hoop */
+    public void PlayerScored()
+    {
+        // Add to the player's total score, based on section
+        score += section;
+
+        Debug.Log("You just scored " + section + " points! Your new total score is " + score + ".");
+    }
 
     /* When a player teleports to their teammate's position */
-    public void BeginNextSection()
+    public void BeginNextSection(int teamId)
     {
-        if (section == 3)
+        if (teamId == 2)
         {
-            section--;
+            section = 2;
             ActivateRow(defenders2, defenders1);
         }
-        else if (section == 2)
+        else if (teamId == 1)
         {
-            section--;
+            section = 1;
             ActivateRow(defenders3, defenders2);
         }
         else
