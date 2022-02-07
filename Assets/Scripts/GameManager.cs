@@ -36,6 +36,15 @@ public class GameManager : MonoBehaviour
         ActivateRow(defenders1, null);
     }
 
+    private void Update()
+    {
+        // TODO: Temporary until we have menus
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     /* When the player gets the ball through the hoop */
     public void PlayerScored()
     {

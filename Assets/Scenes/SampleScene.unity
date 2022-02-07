@@ -223,6 +223,7 @@ MonoBehaviour:
   - {fileID: 2004049469}
   - {fileID: 1015469833}
   section: 3
+  score: 0
 --- !u!1 &126350800 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7843098687317808262, guid: 32b8a9ed1768af84988babb95eff8108, type: 3}
