@@ -8,7 +8,7 @@ public class NPCController : MonoBehaviour
     public Rigidbody rb;
 
     // The NPCMovement script attached to this game object
-    public NPCMovement moveScript;
+    public Component moveScript;
 
     void Start()
     {
@@ -20,24 +20,18 @@ public class NPCController : MonoBehaviour
         }
         if (moveScript == null)
         {
-            Debug.LogError("You forgot to add the npc's movement script.");
-            moveScript = GetComponent<NPCMovement>();
+            Debug.LogError("You forgot to add the npc's move script.");
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ball"))
-        {
-            // NPC should stop moving (TODO: Is this the best approach?)
-            Destroy(moveScript);
+    public void Collide(GameObject collisionObject) {
+        // NPC should stop moving (TODO: Is this the best approach?)
+        Destroy(moveScript);
 
-            // TODO: Should the ball disappear, or at least not be able to pass to teammate?
-            // Or is it funnier if you can pass to a teammate by bouncing off an NPC?
-            Destroy(collision.gameObject);
+        // TODO: Should the ball disappear, or at least not be able to pass to teammate?
+        // Or is it funnier if you can pass to a teammate by bouncing off an NPC?
+        Destroy(collisionObject);
 
-            // TODO: Should the NPC disappear after a while?
-
-        }
+        // TODO: Should the NPC disappear after a while?
     }
 }

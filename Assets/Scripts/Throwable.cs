@@ -10,6 +10,9 @@ public class Throwable : MonoBehaviour
     // How long the ball should stick around after thrown
     public float lifespanTimer = 3.0f; // arbitrary default value
 
+    // Prevent ball from acting while still held
+    public bool isThrown = false;
+
     void Start()
     {
         // Try to find components if necessary
@@ -38,6 +41,9 @@ public class Throwable : MonoBehaviour
         // Remove control of the game object from player
         transform.parent = null;
 
+        // In air behavior now applies
+        isThrown = true;
+
         // Start countdown timer for self-destruct
         StartCoroutine(SelfDestruct());
     }
@@ -61,10 +67,26 @@ public class Throwable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Hoop"))
+        if (isThrown)
         {
-            // GOAL! Tell the GameManager we scored
-            GameManager.S.PlayerScored();
+            if (other.gameObject.CompareTag("Hoop"))
+            {
+                // GOAL! Tell the GameManager we scored
+                GameManager.S.PlayerScored();
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isThrown)
+        {
+            if (collision.gameObject.CompareTag("Opponent"))
+            {
+                // Tell the NPC that it's been hit
+                NPCController npc = collision.gameObject.GetComponent<NPCController>();
+                npc.Collide(gameObject);
+            }
         }
     }
 }

@@ -10,9 +10,6 @@ public class PlayerControl : MonoBehaviour
     // Only ever one player in a scene, so static access from other classes
     public static PlayerControl player;
 
-    // Mouse settings
-    public float mouseSensitivity = 5.0f;
-
     // Used to control player movement
     public CharacterController controller;
     public float moveSpeed = 10.0f; // Arbitrary default value
@@ -42,10 +39,14 @@ public class PlayerControl : MonoBehaviour
     // Current ball position, represented as a mode (choice of target)
     public ShootHeight currentHeight;
 
+    // Used by other NPC's to check if the player is moving
+    public bool isMoving;
+
     // Start is called before the first frame update
     void Start()
     {
         player = this;
+        isMoving = false;
 
         // Try to find the CharacterController if necessary
         if (controller == null)
@@ -80,10 +81,22 @@ public class PlayerControl : MonoBehaviour
 
         // Create the motion vector, clamp to ensure diagonal isn't faster
         Vector3 playerMove = new Vector3(xMove, 0.0f, zMove);
+        playerMove = transform.TransformDirection(playerMove);
         playerMove = Vector3.ClampMagnitude(playerMove, moveSpeed);
 
-        // Use the CharacterController to move the player
-        controller.Move(playerMove * Time.deltaTime);
+        if (playerMove != Vector3.zero)
+        {
+            // Note that the player is moving
+            isMoving = true;
+
+            // Use the CharacterController to move the player
+            controller.Move(playerMove * Time.deltaTime);
+        }
+        else
+        {
+            // Note that the player isn't moving
+            isMoving = false;
+        }
 
         // TODO: Camera rotation (limit rotation?)
         float yRotation = Input.GetAxis("Turn") * rotateSpeed;

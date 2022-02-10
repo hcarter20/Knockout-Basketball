@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ball
   - Hoop
+  - Opponent
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - UI
   - Player
   - Boundary
-  - 
+  - Opponent
   - 
   - 
   - 
