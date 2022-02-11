@@ -14,28 +14,31 @@ public class Meter : MonoBehaviour
         // Set the min and max expected power
         minThrowPower = PlayerControl.player.minThrowSpeed;
         maxThrowPower = PlayerControl.player.maxThrowSpeed;
+
+        // Manually set the meter to initial player variables
+        SetMarker();
     }
 
-    // this is supposed to access the throw speed variable T-T
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        setMarker();
+        // Don't rely on call, automatically update meter if player is trying to throw
+        if (PlayerControl.player.isThrowing)
+        {
+            SetMarker();
+        }
     }
 
-    void setMarker()
+    public void SetMarker()
     {
+        // Get the new current throwing power from the player
         throwPower = PlayerControl.player.throwSpeed;
 
-        //float targetZ = PlayerControl.player.lower ? 16.0f : -16.0f;
-        // Quaternion newAngle = Quaternion.LerpUnclamped(marker.transform.rotation, Quaternion.Euler(0.0f, 0.0f, targetZ), Time.deltaTime);
-
         // Just eyeballed it: should clamp between 16 and -16 degrees z-rotation for min/max.
-        Debug.Log("Min " + minThrowPower + ", Max " + maxThrowPower + ", current " + throwPower);
+        // Max power is top and min power is bottom of meter, use lerp to place marker at current power
         float t = Mathf.InverseLerp(minThrowPower, maxThrowPower, throwPower);
-        Debug.Log(t);
         Quaternion newAngle = Quaternion.Lerp(Quaternion.Euler(0.0f, 0.0f, 16.0f), Quaternion.Euler(0.0f, 0.0f, -16.0f), t);
 
-        marker.transform.rotation = newAngle;
+        // Use local rotation, since marker is a child of the meter background.
+        marker.transform.localRotation = newAngle;
     }
 }

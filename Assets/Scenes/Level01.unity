@@ -655,16 +655,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 206083624}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1697223584}
-  m_RootOrder: 7
+  m_Father: {fileID: 1777217852}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -2.2280579, y: -304.01526}
+  m_AnchoredPosition: {x: -2.2280579, y: -114.01117}
   m_SizeDelta: {x: 5.0831, y: 276.0552}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &213860580
@@ -3324,20 +3324,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 1662416149}
   moveSpeed: 10
-  rotateSpeed: 2
+  rotateSpeed: 1
   ballPrefab: {fileID: 9121507428848948023, guid: 6d450836ecb05ac44b451879bece9116, type: 3}
   lowThrowVector: {x: 0, y: 1, z: 5}
   midThrowVector: {x: 0, y: 1, z: 1}
   highThrowVector: {x: 0, y: 2, z: 1}
-  meterSpeed: 1
-  throwSpeed: 10
+  isThrowing: 0
+  meterSpeed: 2.5
+  throwSpeed: 7
   minThrowSpeed: 7
   maxThrowSpeed: 14
-  lower: 1
+  lower: 0
   lowPosition: {x: 0, y: -0.8, z: 1}
   midPosition: {x: 0, y: -0.4, z: 1.5}
   highPosition: {x: 0, y: 0.5, z: 1.7}
-  currentHeight: 0
+  currentHeight: 2
   isMoving: 0
 --- !u!143 &1662416149
 CharacterController:
@@ -3470,7 +3471,6 @@ RectTransform:
   - {fileID: 1674031436}
   - {fileID: 533567848}
   - {fileID: 1777217852}
-  - {fileID: 206083627}
   m_Father: {fileID: 1969551993}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3679,17 +3679,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1777217851}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 206083627}
   m_Father: {fileID: 1697223584}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0, y: -164.48}
-  m_SizeDelta: {x: 151.0482, y: 151.0482}
+  m_AnchoredPosition: {x: -60, y: -90}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1777217853
 MonoBehaviour:

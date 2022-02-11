@@ -14,7 +14,7 @@ public class PlayerControl : MonoBehaviour
     // Used to control player movement
     public CharacterController controller;
     public float moveSpeed = 10.0f; // Arbitrary default value
-    public float rotateSpeed = 3.0f; // Arbitrary default value
+    public float rotateSpeed = 1.0f; // Arbitrary default value
 
     // Used for throwing the ball
     public GameObject ballPrefab;
@@ -22,14 +22,14 @@ public class PlayerControl : MonoBehaviour
     public Vector3 midThrowVector = new Vector3(0.0f, 1.0f, 1.0f); // Arbitrary default value
     public Vector3 highThrowVector = new Vector3(0.0f, 2.0f, 1.0f); // Arbitrary default value
     private GameObject currentBall;
-    // Set when the ball is about to be thrown
-    private bool throwing = false;
+    // Set when the ball is about to be thrown (meter moving)
+    public bool isThrowing = false;
     // Speed of the power meter (angle of the ball)
     public float meterSpeed = 1.0f; // Arbitrary default value
-    public float throwSpeed = 8.0f; // Arbitrary default value
-    public float minThrowSpeed = 5.0f; // Arbitrary default value
-    public float maxThrowSpeed = 8.0f; // Arbitrary default value
-    public bool lower = true;
+    public float throwSpeed; // Arbitrary default value
+    public float minThrowSpeed = 7.0f; // Arbitrary default value
+    public float maxThrowSpeed = 14.0f; // Arbitrary default value
+    public bool lower = false;
     // Position of the ball relative to player camera based on mode
     // These are default values, otherwise customize through the editor
     public Vector3 lowPosition = new Vector3(0.0f, -0.8f, 1f);
@@ -37,7 +37,7 @@ public class PlayerControl : MonoBehaviour
     public Vector3 highPosition = new Vector3(0.0f, 0.5f, 1.7f);
 
     // Current ball position, represented as a mode (choice of target)
-    public ShootHeight currentHeight;
+    public ShootHeight currentHeight = ShootHeight.Low; // Start at the bottom of the screen (out of view)
 
     // Used by other NPC's to check if the player is moving
     public bool isMoving;
@@ -50,9 +50,11 @@ public class PlayerControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-	isMoving = false;
-        
-	// Try to find the CharacterController if necessary
+        // Set the initial state
+        isThrowing = false;
+        isMoving = false;
+
+        // Try to find the CharacterController if necessary
         if (controller == null)
         {
             Debug.LogError("You forgot to add the player's character controller.");
@@ -103,55 +105,54 @@ public class PlayerControl : MonoBehaviour
         }
 
         // TODO: Camera rotation (limit rotation?)
-        float yRotation = Input.GetAxis("Turn") * rotateSpeed;
+        float yRotation = Input.GetAxis("HorizontalAlt") * rotateSpeed;
         transform.localRotation *= Quaternion.Euler(0f, yRotation, 0f);
-    }
-
-    private void FixedUpdate()
-    {
-        if (throwing)
-        {
-            // Deactivate the throwing flag
-            throwing = false;
-
-            // Throw the basketball by calling its script
-            Throwable throwScript = currentBall.GetComponent<Throwable>();
-
-            // TODO: based on accuracy of power meter (somehow)
-            Vector3 throwVector = Vector3.zero;
-
-            if (currentHeight == ShootHeight.High)
-                throwVector = highThrowVector;
-            else if (currentHeight == ShootHeight.Mid)
-                throwVector = midThrowVector;
-            else if (currentHeight == ShootHeight.Low)
-                throwVector = lowThrowVector;
-
-            throwScript.Throw(throwVector.normalized * throwSpeed);
-
-            // This ball will prompt us to spawn a new one when it destroys itself
-            currentBall = null;
-        }
     }
 
     private void UpdateBall()
     {
-        // TODO: Convert this to a power meter
-        // Update the current throw power
-        float goalThrowSpeed = lower ? minThrowSpeed : maxThrowSpeed;
-
-        if (Mathf.Abs(goalThrowSpeed - throwSpeed) < 0.1f)
-            lower = !lower;
-        else
-            throwSpeed = Mathf.MoveTowards(throwSpeed, goalThrowSpeed, meterSpeed * Time.deltaTime);
-        // Check if the player wants to throw the ball
+        // Check if the fire button was first pushed this frame
         if (Input.GetButtonDown("Fire"))
-            throwing = true;
+        {
+            // Set the throwing flag (for below)
+            isThrowing = true;
+
+            // Initialize the meter at minimum power
+            throwSpeed = minThrowSpeed;
+
+        }
+        // Check if the fire button was first released this frame
+        else if (Input.GetButtonUp("Fire"))
+        {
+            // The throwing flag should always be set if we try to throw
+            if (!isThrowing)
+                Debug.LogError("Attempting to throw the ball without throwing flag set.");
+
+            // Deactivate the throwing flag
+            isThrowing = false;
+
+            // Throw the ball
+            ThrowBall();
+        }
+
+        // If currently trying holding down button to throw, then update the power
+        if (isThrowing)
+        {
+            // Which value are we currently moving towards? (min or max)
+            float goalThrowSpeed = lower ? minThrowSpeed : maxThrowSpeed;
+
+            // Reverse the meter direction (rise/fall) when reach the max/min
+            if (Mathf.Abs(goalThrowSpeed - throwSpeed) < 0.1f)
+                lower = !lower;
+            else
+                // Otherwise, update the throw speed
+                throwSpeed = Mathf.MoveTowards(throwSpeed, goalThrowSpeed, meterSpeed * Time.deltaTime);
+        }
         else
         {
             // Get input on the arrows keys to indicate position swap
             // float vertArrow = Input.GetAxisRaw("VerticalAlt");
-            
+
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 if (currentHeight == ShootHeight.High)
@@ -159,7 +160,7 @@ public class PlayerControl : MonoBehaviour
                     currentHeight = ShootHeight.Mid;
                     currentBall.transform.localPosition = midPosition;
                 }
-                else  if (currentHeight == ShootHeight.Mid)
+                else if (currentHeight == ShootHeight.Mid)
                 {
                     currentHeight = ShootHeight.Low;
                     currentBall.transform.localPosition = lowPosition;
@@ -178,10 +179,28 @@ public class PlayerControl : MonoBehaviour
                     currentBall.transform.localPosition = highPosition;
                 }
             }
-
-            // TODO: Do we want to allow horizontal positioning?
-            //float horizArrow = Input.GetAxisRaw("HorizontalAlt");
         }
+    }
+
+    public void ThrowBall()
+    {
+        // Throw the basketball by calling its script
+        Throwable throwScript = currentBall.GetComponent<Throwable>();
+
+        // TODO: based on accuracy of power meter (somehow)
+        Vector3 throwVector = Vector3.zero;
+
+        if (currentHeight == ShootHeight.High)
+            throwVector = highThrowVector;
+        else if (currentHeight == ShootHeight.Mid)
+            throwVector = midThrowVector;
+        else if (currentHeight == ShootHeight.Low)
+            throwVector = lowThrowVector;
+
+        throwScript.Throw(throwVector.normalized * throwSpeed);
+
+        // This ball will prompt us to spawn a new one when it destroys itself
+        currentBall = null;
     }
 
     public void SpawnBall()
@@ -189,9 +208,15 @@ public class PlayerControl : MonoBehaviour
         // First, instantiate a new instance from the prefab
         currentBall = Instantiate(ballPrefab, transform);
 
-        // By default, start out of view (bottom of the screen)
-        currentHeight = ShootHeight.Low;
-        currentBall.transform.localPosition = lowPosition;
+        // When spawn a new ball, maintain the same height as the previous throw
+        if (currentHeight == ShootHeight.Low)
+            currentBall.transform.localPosition = lowPosition;
+        else if (currentHeight == ShootHeight.Mid)
+            currentBall.transform.localPosition = midPosition;
+        else if (currentHeight == ShootHeight.High)
+            currentBall.transform.localPosition = highPosition;
+        else
+            Debug.LogError("Can't position ball at undefined height.");
     }
 
     public void Teleport(GameObject teammate)
