@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class TitleMenu : MonoBehaviour
 {
-     public GameObject Settings;
+    public GameObject Title;
+    public GameObject Settings;
 
     public void PlayGame () 
     {
@@ -20,11 +21,13 @@ public class TitleMenu : MonoBehaviour
 
     public void SettingsLoad ()
     {
+        Title.SetActive(false);
         Settings.SetActive(true);
     }
 
     public void SettingsReturn ()
     {
+        Title.SetActive(true);
         Settings.SetActive(false);
     }
 }

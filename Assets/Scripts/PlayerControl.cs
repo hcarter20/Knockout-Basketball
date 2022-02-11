@@ -42,11 +42,14 @@ public class PlayerControl : MonoBehaviour
     // Current ball position, represented as a mode (choice of target)
     public ShootHeight currentHeight;
 
+    private void Awake()
+    {
+        player = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        player = this;
-
         // Try to find the CharacterController if necessary
         if (controller == null)
         {
