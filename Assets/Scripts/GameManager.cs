@@ -13,12 +13,15 @@ public class GameManager : MonoBehaviour
     // Maintains access to all NPC's in the scene (set in Editor)
     public GameObject[] defenders1, defenders2, defenders3;
 
-    [SerializeField] Text scoreAmount; // egchan added, not sure best order
+    [SerializeField] 
+    public Text scoreAmount; // egchan added, not sure best order
+    public Text koAmount;
 
     // Section represents how far the player is from the hoop,
     // and how many points they get for a successful shot at this distance.
     public int section = 3;
     public int score = 0;
+    public int totalKO = 0;
 
     private void Awake()
     {
@@ -53,14 +56,18 @@ public class GameManager : MonoBehaviour
     {
         // Add to the player's total score, based on section
         score += section;
-        updateScoreUI();
+        scoreAmount.text = score.ToString("0");
         Debug.Log("You just scored " + section + " points! Your new total score is " + score + ".");
     }
 
-    /* egchan : take score value to ui */
-    private void updateScoreUI()
+    public void OpponentHit()
     {
-        scoreAmount.text = score.ToString("0");
+        //egchan KO count
+        totalKO += 1;
+        Debug.Log("K.O!!!");
+
+        // UI element not currently implemented
+        // koAmount.text = totalKO.ToString("0");
     }
 
     /* When a player teleports to their teammate's position */

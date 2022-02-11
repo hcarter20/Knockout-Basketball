@@ -275,7 +275,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &86550669
 MonoBehaviour:
@@ -302,8 +302,10 @@ MonoBehaviour:
   - {fileID: 2004049469}
   - {fileID: 1015469833}
   scoreAmount: {fileID: 1285943678}
+  koAmount: {fileID: 0}
   section: 3
   score: 0
+  totalKO: 0
 --- !u!1 &91076740
 GameObject:
   m_ObjectHideFlags: 0
@@ -3747,7 +3749,7 @@ RectTransform:
   - {fileID: 1554475460}
   - {fileID: 796104980}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4821,10 +4823,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe4dbec35b085a48938c137eb8e3feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 5
   controller: {fileID: 1662416149}
   moveSpeed: 10
-  rotateSpeed: 3
+  rotateSpeed: 2
   ballPrefab: {fileID: 9121507428848948023, guid: 6d450836ecb05ac44b451879bece9116, type: 3}
   lowThrowVector: {x: 0, y: 1, z: 5}
   midThrowVector: {x: 0, y: 1, z: 1}
@@ -4838,6 +4839,7 @@ MonoBehaviour:
   midPosition: {x: 0, y: -0.4, z: 1.5}
   highPosition: {x: 0, y: 0.5, z: 1.7}
   currentHeight: 0
+  isMoving: 0
 --- !u!143 &1662416149
 CharacterController:
   m_ObjectHideFlags: 0

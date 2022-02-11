@@ -12,8 +12,8 @@ public class NPCController : MonoBehaviour
     public Component moveScript;
 
     //egchan trying to count knocked NPCs
-    [SerializeField] Text koAmount; 
-    public int koed = 0; 
+    [SerializeField] Text koAmount;
+    public int koed = 0;
 
     void Start()
     {
@@ -39,10 +39,8 @@ public class NPCController : MonoBehaviour
 
         // TODO: Should the NPC disappear after a while?
 
-        //egchan KO count
-        koed += 1;
-        Debug.Log("K.O!!!");
-        }
+        // Notify the GameManager that an opponent has been KO'ed
+        GameManager.S.OpponentHit();
     }
 
     /* egchan : take score value to ui */
