@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     // Maintains access to all NPC's in the scene (set in Editor)
     public GameObject[] defenders1, defenders2, defenders3;
+
+    [SerializeField] Text scoreAmount; // egchan added, not sure best order
 
     // Section represents how far the player is from the hoop,
     // and how many points they get for a successful shot at this distance.
@@ -41,8 +44,14 @@ public class GameManager : MonoBehaviour
     {
         // Add to the player's total score, based on section
         score += section;
-
+        updateScoreUI();
         Debug.Log("You just scored " + section + " points! Your new total score is " + score + ".");
+    }
+
+    /* egchan : take score value to ui */
+    private void updateScoreUI()
+    {
+        scoreAmount.text = score.ToString("0");
     }
 
     /* When a player teleports to their teammate's position */
