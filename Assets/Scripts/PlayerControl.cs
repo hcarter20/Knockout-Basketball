@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -29,7 +30,6 @@ public class PlayerControl : MonoBehaviour
     public float minThrowSpeed = 5.0f; // Arbitrary default value
     public float maxThrowSpeed = 8.0f; // Arbitrary default value
     public bool lower = true;
-
     // Position of the ball relative to player camera based on mode
     // These are default values, otherwise customize through the editor
     public Vector3 lowPosition = new Vector3(0.0f, -0.8f, 1f);
@@ -42,13 +42,17 @@ public class PlayerControl : MonoBehaviour
     // Used by other NPC's to check if the player is moving
     public bool isMoving;
 
+    private void Awake()
+    {
+        player = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        player = this;
-        isMoving = false;
-
-        // Try to find the CharacterController if necessary
+	isMoving = false;
+        
+	// Try to find the CharacterController if necessary
         if (controller == null)
         {
             Debug.LogError("You forgot to add the player's character controller.");
@@ -140,7 +144,6 @@ public class PlayerControl : MonoBehaviour
             lower = !lower;
         else
             throwSpeed = Mathf.MoveTowards(throwSpeed, goalThrowSpeed, meterSpeed * Time.deltaTime);
-
         // Check if the player wants to throw the ball
         if (Input.GetButtonDown("Fire"))
             throwing = true;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NPCController : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class NPCController : MonoBehaviour
 
     // The NPCMovement script attached to this game object
     public Component moveScript;
+
+    //egchan trying to count knocked NPCs
+    [SerializeField] Text koAmount; 
+    public int koed = 0; 
 
     void Start()
     {
@@ -33,5 +38,16 @@ public class NPCController : MonoBehaviour
         Destroy(collisionObject);
 
         // TODO: Should the NPC disappear after a while?
+
+        //egchan KO count
+        koed += 1;
+        Debug.Log("K.O!!!");
+        }
+    }
+
+    /* egchan : take score value to ui */
+    private void updateKoUI()
+    {
+        koAmount.text = koed.ToString("0");
     }
 }
