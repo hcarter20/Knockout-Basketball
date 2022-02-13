@@ -8,7 +8,7 @@ public class Throwable : MonoBehaviour
     public Rigidbody rb;
 
     // How long the ball should stick around after thrown
-    public float lifespanTimer = 3.0f; // arbitrary default value
+    public float lifespanTimer = 5.0f; // arbitrary default value
 
     // Prevent ball from acting while still held
     public bool isThrown = false;
@@ -53,16 +53,16 @@ public class Throwable : MonoBehaviour
         // Wait out the timer
         yield return new WaitForSeconds(lifespanTimer);
 
+        // In a separate method, so we can avoid the timer if necessary
+        SelfDestroy();
+    }
+
+    public void SelfDestroy()
+    {
         // TODO: Animation? Sound effect?
 
         // Destroy this game object
         Destroy(gameObject);
-    }
-
-    public void OnDestroy()
-    {
-        // Tell the player to spawn a new ball
-        PlayerControl.player.SpawnBall();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -85,7 +85,13 @@ public class Throwable : MonoBehaviour
             {
                 // Tell the NPC that it's been hit
                 NPCController npc = collision.gameObject.GetComponent<NPCController>();
-                npc.Collide(gameObject);
+
+                // If we knock out an NPC, then destroy this ball
+                if (npc.KnockOut())
+                {
+                    // Destroy the ball immediately
+                    SelfDestroy();
+                }
             }
         }
     }

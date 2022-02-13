@@ -11,10 +11,6 @@ public class NPCController : MonoBehaviour
     // The NPCMovement script attached to this game object
     public Component moveScript;
 
-    //egchan trying to count knocked NPCs
-    [SerializeField] Text koAmount;
-    public int koed = 0;
-
     void Start()
     {
         // Try to find components if necessary
@@ -29,23 +25,23 @@ public class NPCController : MonoBehaviour
         }
     }
 
-    public void Collide(GameObject collisionObject) {
-        // NPC should stop moving (TODO: Is this the best approach?)
-        Destroy(moveScript);
+    public bool KnockOut() {
+        // If we haven't been hit before, moveScript should still be active
+        if (moveScript != null)
+        {
+            // NPC should stop moving (TODO: Is this the best approach?)
+            Destroy(moveScript);
 
-        // TODO: Should the ball disappear, or at least not be able to pass to teammate?
-        // Or is it funnier if you can pass to a teammate by bouncing off an NPC?
-        Destroy(collisionObject);
+            // TODO: Should the NPC disappear after a while?
 
-        // TODO: Should the NPC disappear after a while?
+            // Notify the GameManager that an opponent has been KO'ed
+            GameManager.S.OpponentHit();
 
-        // Notify the GameManager that an opponent has been KO'ed
-        GameManager.S.OpponentHit();
-    }
+            // Tell the ball that it got a KO
+            return true;
+        }
 
-    /* egchan : take score value to ui */
-    private void updateKoUI()
-    {
-        koAmount.text = koed.ToString("0");
+        // If we've already been knocked out before, return false
+        return false;
     }
 }

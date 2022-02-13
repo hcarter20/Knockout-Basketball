@@ -127,8 +127,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6692329902354290438}
-  lr: {fileID: 4100637512801078408}
-  lifespanTimer: 3
+  lifespanTimer: 5
+  isThrown: 0
 --- !u!120 &4100637512801078408
 LineRenderer:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class NPCDynamicMovement : MonoBehaviour
         // TODO: Centralize this work to an NPC manager
         
         // Are we trying to get near the player?
-        if (approachPlayer && PlayerControl.player.isMoving)
+        if (approachPlayer && PlayerControl.player.isMoving && GameManager.S.gameState == GameState.playing)
         {
             // Get the current position of the player
             Vector3 playerPosition = PlayerControl.player.transform.position;
@@ -34,7 +34,7 @@ public class NPCDynamicMovement : MonoBehaviour
             // Are we within our goal distance from the player?
             if (dist < goalDist)
             {
-                // TODO: Affect the player in negative way. Drain time?
+                // TODO: Affect the player in negative way. Drain time? Push around?
 
             }
             else
