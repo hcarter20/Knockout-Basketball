@@ -21,7 +21,7 @@ public class PlayerControl : MonoBehaviour
     public Vector3 lowThrowVector = new Vector3(0.0f, 1.0f, 4.0f); // Arbitrary default value
     public Vector3 midThrowVector = new Vector3(0.0f, 1.0f, 1.0f); // Arbitrary default value
     public Vector3 highThrowVector = new Vector3(0.0f, 2.0f, 1.0f); // Arbitrary default value
-    private GameObject currentBall;
+    public GameObject currentBall;
     private GameObject thrownBall;
     // Set when the ball is about to be thrown (meter moving)
     public bool isThrowing = false;
@@ -73,37 +73,39 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         // TODO: Consider moving to FixedUpdate for performance?
-
-        // Update the player's movement, based on keyboard input
-        UpdateMovement();
-
-        // Can only throw the ball during gameplay?
-        if (GameManager.S.gameState == GameState.playing)
+        if (GameManager.S.gameState != GameState.gameOver)
         {
-            // When player isn't holding ball, check if need to spawn one
-            if (currentBall == null)
+            // Update the player's movement, based on keyboard input
+            UpdateMovement();
+
+            // Can only throw the ball during gameplay?
+            if (GameManager.S.gameState == GameState.playing)
             {
-
-                // If player starts to throw when ball isn't present,
-                // automatically destroy previous ball (and therefore create a new one)
-                if (Input.GetButtonDown("Fire") || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+                // When player isn't holding ball, check if need to spawn one
+                if (currentBall == null)
                 {
-                    // Destroy the previously thrown ball
-                    thrownBall.GetComponent<Throwable>().SelfDestroy();
 
-                    // Spawn a new ball immediately
-                    SpawnBall();
+                    // If player starts to throw when ball isn't present,
+                    // automatically destroy previous ball (and therefore create a new one)
+                    if (Input.GetButtonDown("Fire") || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        // Destroy the previously thrown ball
+                        thrownBall.GetComponent<Throwable>().SelfDestroy();
+
+                        // Spawn a new ball immediately
+                        SpawnBall();
+                    }
+                    // If the thrown ball is also destroyed already, spawn a new one automatically
+                    else if (thrownBall == null)
+                        SpawnBall();
+
                 }
-                // If the thrown ball is also destroyed already, spawn a new one automatically
-                else if (thrownBall == null)
-                    SpawnBall();
 
+                // Update the current ball's position/throw power, or throw the ball
+                // (Separate if statement - should trigger same frame as above)
+                if (currentBall != null)
+                    UpdateBall();
             }
-
-            // Update the current ball's position/throw power, or throw the ball
-            // (Separate if statement - should trigger same frame as above)
-            if (currentBall != null)
-                UpdateBall();
         }
     }
 

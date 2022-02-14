@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public int score; // Player's score in points
     public int round; // How many times the player has scored
     public int koCount; // TODO: How to use this?
+    public int npcsTouching;
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
         // Initialize gameplay variables
         score = 0;
         koCount = 0;
+        npcsTouching = 0;
 
         // Set the remaining variables
         StartRound();
@@ -83,7 +85,7 @@ public class GameManager : MonoBehaviour
             if (timeLeft > 0.0f)
             {
                 // Continually decrement the timer
-                timeLeft -= Time.deltaTime;
+                timeLeft -= Time.deltaTime + (npcsTouching * 0.01f);
             }
 
             if (timeLeft <= 0.0f)
@@ -171,6 +173,9 @@ public class GameManager : MonoBehaviour
 
         // Wait for a couple seconds
         yield return new WaitForSeconds(3.0f);
+
+        // Destroy the player's ball, if one exists
+        Destroy(PlayerControl.player.currentBall);
 
         // TODO: Activate the end screen
         endScreen.SetActive(true);

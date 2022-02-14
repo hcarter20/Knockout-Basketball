@@ -12,6 +12,7 @@ public class NPCDynamicMovement : MonoBehaviour
 
     // Should the NPC try to approach the player?
     public bool approachPlayer = true;
+    public bool atPlayer = false;
 
     private void LateUpdate()
     {
@@ -34,11 +35,21 @@ public class NPCDynamicMovement : MonoBehaviour
             // Are we within our goal distance from the player?
             if (dist < goalDist)
             {
-                // TODO: Affect the player in negative way. Drain time? Push around?
-
+                if (!atPlayer)
+                {
+                    // Affect the player in negative way.
+                    atPlayer = true;
+                    GameManager.S.npcsTouching++;
+                }
             }
             else
             {
+                if (atPlayer)
+                {
+                    // Stop affecting the player
+                    atPlayer = false;
+                    GameManager.S.npcsTouching--;
+                }
                 // Move closer to the player
                 transform.position = Vector3.MoveTowards(transform.position, playerPosition, moveSpeed * Time.deltaTime);
             }
