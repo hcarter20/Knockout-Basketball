@@ -13,6 +13,8 @@ public class Throwable : MonoBehaviour
     // Prevent ball from acting while still held
     public bool isThrown = false;
 
+    public Vector3 positionWhenThrown;
+
     void Start()
     {
         // Try to find components if necessary
@@ -34,6 +36,9 @@ public class Throwable : MonoBehaviour
 
         // Re-activate physics (this also re-activates gravity)
         rb.isKinematic = false;
+
+        // Save our current position, for scoring
+        positionWhenThrown = transform.position;
 
         // Apply physics force to the ball
         rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
@@ -71,8 +76,8 @@ public class Throwable : MonoBehaviour
         {
             if (other.gameObject.CompareTag("Hoop"))
             {
-                // GOAL! Tell the GameManager we scored
-                GameManager.S.PlayerScored();
+                // GOAL! Tell the GameManager we scored, and our location at the start
+                GameManager.S.PlayerScored(positionWhenThrown);
             }
         }
     }

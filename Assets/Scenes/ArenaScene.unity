@@ -221,7 +221,7 @@ RectTransform:
   m_GameObject: {fileID: 35312386}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1, z: 1}
   m_Children:
   - {fileID: 2125537700}
   - {fileID: 1923809755}
@@ -676,7 +676,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.842, y: -1.8422}
+  m_AnchoredPosition: {x: 1.841999, y: -1.8422012}
   m_SizeDelta: {x: 617.8528, y: 354.3801}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &379417013
@@ -872,11 +872,13 @@ MonoBehaviour:
   score: 0
   round: 0
   koCount: 0
+  npcsTouching: 0
   scoreText: {fileID: 822287403}
   timerText: {fileID: 507575329}
   ballText: {fileID: 696535142}
   scoreReport: {fileID: 1777879778}
   endScreen: {fileID: 35312386}
+  hoop: {fileID: 800419424}
 --- !u!4 &494547337
 Transform:
   m_ObjectHideFlags: 0
@@ -3923,7 +3925,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.8421936, y: 0.9210968}
+  m_AnchoredPosition: {x: 1.8421631, y: 0.92108154}
   m_SizeDelta: {x: 33.1587, y: 16.5793}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1541867612
@@ -4164,7 +4166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -4184,9 +4186,9 @@ Canvas:
   m_GameObject: {fileID: 1619758815}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 963194227}
+  m_PlaneDistance: 1
   m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -4352,6 +4354,7 @@ MonoBehaviour:
   lowThrowVector: {x: 0, y: 1, z: 5}
   midThrowVector: {x: 0, y: 1, z: 1}
   highThrowVector: {x: 0, y: 2, z: 1}
+  currentBall: {fileID: 0}
   isThrowing: 0
   meterSpeed: 2.5
   throwSpeed: 7
@@ -5274,7 +5277,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -86.5255, y: -0}
+  m_AnchoredPosition: {x: -86.5255, y: 0}
   m_SizeDelta: {x: 173.0495, y: 245.581}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &2125537699

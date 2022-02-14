@@ -21,13 +21,14 @@ public class GameManager : MonoBehaviour
     public int score; // Player's score in points
     public int round; // How many times the player has scored
     public int koCount; // TODO: How to use this?
+    public int npcsTouching;
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
-
     public GameObject endScreen;
 
-    // TODO: Maintains access to all NPC's in the scene?
+    // Position of the hoop, for determining score of a throw
+    public GameObject hoop;
 
     private void Awake()
     {
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
         // Initialize gameplay variables
         score = 0;
         koCount = 0;
+        npcsTouching = 0;
 
         // Set the remaining variables
         StartRound();
@@ -83,7 +85,7 @@ public class GameManager : MonoBehaviour
             if (timeLeft > 0.0f)
             {
                 // Continually decrement the timer
-                timeLeft -= Time.deltaTime;
+                timeLeft -= Time.deltaTime + (npcsTouching * 0.01f);
             }
 
             if (timeLeft <= 0.0f)
@@ -118,14 +120,23 @@ public class GameManager : MonoBehaviour
     }
 
     /* When the player gets the ball through the hoop */
-    public void PlayerScored()
+    public void PlayerScored(Vector3 positionWhenThrown)
     {
         // Update the round counter
         round++;
 
-        // Add to the player's total score, based on section
+        // Add to the player's total score, based on distance from hoop
+        float distance = Vector3.Distance(positionWhenThrown, hoop.transform.position);
+        Debug.Log(distance);
+
+        int points = 1;
+        if (distance > 12.5f)
+            points = 3;
+        else if (distance > 7.0f)
+            points = 2;
+
         // TODO: Apply basketball score rules
-        score += 1;
+        score += points;
 
         // Update the score value in the UI
         scoreText.text = score.ToString("0");
@@ -162,6 +173,9 @@ public class GameManager : MonoBehaviour
 
         // Wait for a couple seconds
         yield return new WaitForSeconds(3.0f);
+
+        // Destroy the player's ball, if one exists
+        Destroy(PlayerControl.player.currentBall);
 
         // TODO: Activate the end screen
         endScreen.SetActive(true);
