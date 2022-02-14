@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class roundChange : MonoBehaviour
+public class RoundChange : MonoBehaviour
 {
-    public void nextLevel()
+    public void NextLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void quitToMenu()
+    public void QuitToMenu()
     {
         SceneManager.LoadScene("TitleScreen");
     }

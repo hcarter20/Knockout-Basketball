@@ -24,7 +24,7 @@ public class NPCDynamicMovement : MonoBehaviour
         // TODO: Centralize this work to an NPC manager
         
         // Are we trying to get near the player?
-        if (approachPlayer && PlayerControl.player.isMoving && GameManager.S.gameState == GameState.playing)
+        if (approachPlayer /* && PlayerControl.player.isMoving */ && GameManager.S.gameState == GameState.playing)
         {
             // Get the current position of the player
             Vector3 playerPosition = PlayerControl.player.transform.position;

@@ -14,9 +14,9 @@ public class GameManager : MonoBehaviour
     public GameState gameState;
 
     // Gameplay variables (time, score, total basketballs left, etc.)
-    public int totalTime = 59; // Total time for a single shot (in seconds)
+    public int totalTime = 90; // Total time for a single shot (in seconds)
     public float timeLeft;
-    public int totalBalls = 8; // Total number of basketballs at start
+    public int totalBalls = 30; // Total number of basketballs at start
     public int ballsLeft;
     public int score; // Player's score in points
     public int round; // How many times the player has scored
@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
+
+    public GameObject endScreen;
 
     // TODO: Maintains access to all NPC's in the scene?
 
@@ -34,8 +36,6 @@ public class GameManager : MonoBehaviour
             S = this;
         else
             Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -84,10 +84,7 @@ public class GameManager : MonoBehaviour
             {
                 // Continually decrement the timer
                 timeLeft -= Time.deltaTime;
-                timerText.text = "0:" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
-
-                // TODO: If we make timer longer than 60 seconds, switch to this method
-                // timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
+                timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
             }
 
             if (timeLeft <= 0.0f)
@@ -107,7 +104,6 @@ public class GameManager : MonoBehaviour
         // Update the UI to reflect the decrease
         ballText.text = ballsLeft.ToString("0");
     }
-
 
     public void OpponentHit()
     {
@@ -130,11 +126,11 @@ public class GameManager : MonoBehaviour
 
         // Update the score value in the UI
         scoreText.text = score.ToString("0");
-        scoreReport.text = "You scored " + score.ToString("0") + " points! Nice Job!";
-        Debug.Log("You just scored " + section + " points! Your new total score is " + score + ".");
+        // scoreReport.text = "You scored " + score.ToString("0") + " points! Nice Job!";
+        // Debug.Log("You just scored " + 1 + " points! Your new total score is " + score + ".");
 
         // Celebrate the basket, then reset the scene
-        StartCoroutine(Celebrate());
+        // StartCoroutine(Celebrate());
     }
 
     public IEnumerator Celebrate()
@@ -150,10 +146,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
 
         // Reset the field for the next round
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
         // Reset the gameplay variables for the new round
-        StartRound();
+        // StartRound();
     }
 
     public IEnumerator GameOver()
@@ -165,6 +161,17 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
 
         // TODO: Activate the end screen
+        endScreen.SetActive(true);
 
+        // TODO: Update end screen values
+        if (score == 1)
+            scoreReport.text = "You scored 1 point! Nice Job!";
+        else
+            scoreReport.text = "You scored " + score + " points! Nice Job!";
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -43,6 +43,9 @@ public class PlayerControl : MonoBehaviour
     // Used by other NPC's to check if the player is moving
     public bool isMoving;
 
+    // Keeps track of how many NPC's are currently touching
+    public int npcsTouching = 0;
+
     private void Awake()
     {
         player = this;

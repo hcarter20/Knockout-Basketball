@@ -21,11 +21,6 @@ public class PauseMenu : MonoBehaviour {
             Destroy(gameObject);
     }
 
-    private void Start()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
     // Update is called once per frame
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -85,9 +80,5 @@ public class PauseMenu : MonoBehaviour {
         Time.timeScale = 1;
         GamePaused = false;
         SceneManager.LoadScene("TitleScreen");
-
-        // Manually destroy the game manager and menu when go to title screen
-        Destroy(GameManager.S.gameObject);
-        Destroy(gameObject);
     }
 }

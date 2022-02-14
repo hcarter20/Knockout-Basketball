@@ -7,15 +7,15 @@ public class TitleMenu : MonoBehaviour
 {
     public GameObject Title;
     public GameObject Settings;
+    public string FirstLevelName;
 
     public void PlayGame () 
     {
-        SceneManager.LoadScene("Level01");
+        SceneManager.LoadScene(FirstLevelName);
     }
 
     public void QuitGame ()
     {
-        Debug.Log("Quit!");
         Application.Quit();
     }
 
