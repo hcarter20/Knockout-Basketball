@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public int koCount; // TODO: How to use this?
 
     // UI Elements which display the gameplay variables
-    public Text scoreText, timerText, ballText;
+    public Text scoreText, timerText, ballText, scoreReport;
 
     // TODO: Maintains access to all NPC's in the scene?
 
@@ -130,6 +130,8 @@ public class GameManager : MonoBehaviour
 
         // Update the score value in the UI
         scoreText.text = score.ToString("0");
+        scoreReport.text = "You scored " + score.ToString("0") + " points! Nice Job!";
+        Debug.Log("You just scored " + section + " points! Your new total score is " + score + ".");
 
         // Celebrate the basket, then reset the scene
         StartCoroutine(Celebrate());
