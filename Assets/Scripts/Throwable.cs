@@ -76,6 +76,7 @@ public class Throwable : MonoBehaviour
 
         // Destroy this game object
         Destroy(gameObject);
+        FindObjectOfType<audioManagement>().Play("ballExplode");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -86,6 +87,8 @@ public class Throwable : MonoBehaviour
             {
                 // GOAL! Tell the GameManager we scored, and our location at the start
                 GameManager.S.PlayerScored(positionWhenThrown);
+                FindObjectOfType<audioManagement>().Play("net");
+                FindObjectOfType<audioManagement>().Play("cheer");
             }
         }
     }
@@ -111,6 +114,10 @@ public class Throwable : MonoBehaviour
 
                     // Destroy the ball immediately
                     SelfDestroy();
+                    FindObjectOfType<audioManagement>().Play("hitNPC1");
+                    FindObjectOfType<audioManagement>().Play("hitNPC2");
+                    int r = random.Next(1,5);
+                    FindObjectOfType<audioManagement>().Play(r.ToString());
                 }
             }
         }

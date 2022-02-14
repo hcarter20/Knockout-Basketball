@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
 
         // Set the remaining variables
         StartRound();
+        FindObjectOfType<audioManagement>().Play("crowd");
     }
 
     private void StartRound()
