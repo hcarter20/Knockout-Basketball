@@ -128,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 7185374545284384931}
   moveScript: {fileID: 7185374545284384951}
+  respawnTime: 45
 --- !u!114 &7185374545284384951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc78d9d5a244cf4e867292a41f69bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 1
   goalDist: 2
   approachPlayer: 1
+  atPlayer: 0
+  movementEnabled: 1

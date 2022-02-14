@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DynamicNPC (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7185374545284384940, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
+      propertyPath: respawnTime
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7185374545284384941, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -190,10 +194,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7b03f75084513dc468e90bae113e8f8c, type: 2}
-    - target: {fileID: 7185374545284384951, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
-      propertyPath: moveSpeed
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
 --- !u!1 &35312386
@@ -2718,6 +2718,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DynamicNPC (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7185374545284384940, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
+      propertyPath: respawnTime
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7185374545284384941, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -3440,6 +3444,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DynamicNPC (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7185374545284384940, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
+      propertyPath: respawnTime
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7185374545284384941, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -3512,6 +3520,10 @@ PrefabInstance:
     - target: {fileID: 7185374545284384937, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_Name
       value: DynamicNPC (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185374545284384940, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
+      propertyPath: respawnTime
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7185374545284384941, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_RootOrder
@@ -4737,6 +4749,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DynamicNPC (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7185374545284384940, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
+      propertyPath: respawnTime
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7185374545284384941, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -5656,6 +5672,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DynamicNPC
       objectReference: {fileID: 0}
+    - target: {fileID: 7185374545284384940, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
+      propertyPath: respawnTime
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7185374545284384941, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -5712,10 +5732,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7b03f75084513dc468e90bae113e8f8c, type: 2}
-    - target: {fileID: 7185374545284384951, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
-      propertyPath: moveSpeed
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
 --- !u!1 &1220368353465707868
