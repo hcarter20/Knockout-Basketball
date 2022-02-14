@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 7185374545284384931}
   moveScript: {fileID: 7185374545284384951}
-  respawnTime: 45
+  respawnTime: 30
 --- !u!114 &7185374545284384951
 MonoBehaviour:
   m_ObjectHideFlags: 0

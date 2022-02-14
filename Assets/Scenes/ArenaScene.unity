@@ -5672,10 +5672,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: DynamicNPC
       objectReference: {fileID: 0}
-    - target: {fileID: 7185374545284384940, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
-      propertyPath: respawnTime
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 7185374545284384941, guid: 59b3b9d3763a02743b2feea6cf3819b2, type: 3}
       propertyPath: m_RootOrder
       value: 6

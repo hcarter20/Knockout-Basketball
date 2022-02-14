@@ -13,7 +13,12 @@ public class Throwable : MonoBehaviour
     // Prevent ball from acting while still held
     public bool isThrown = false;
 
+    // Position when ball is initial thrown
     public Vector3 positionWhenThrown;
+    public float forceWhenThrown;
+
+    // Prefab of an explosion, triggered when thrown hard enough
+    public GameObject explosionPrefab;
 
     void Start()
     {
@@ -42,6 +47,9 @@ public class Throwable : MonoBehaviour
 
         // Apply physics force to the ball
         rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
+
+        // Save the thrown force, for explosion check later
+        forceWhenThrown = throwVector.magnitude;
 
         // Remove control of the game object from player
         transform.parent = null;
@@ -94,6 +102,13 @@ public class Throwable : MonoBehaviour
                 // If we knock out an NPC, then destroy this ball
                 if (npc.KnockOut())
                 {
+                    // If we hit the NPC hard enough, trigger an explosion
+                    if (forceWhenThrown > 13.5f)
+                    {
+                        GameObject explosion = Instantiate(explosionPrefab, transform);
+                        explosion.transform.parent = null;
+                    }
+
                     // Destroy the ball immediately
                     SelfDestroy();
                 }
