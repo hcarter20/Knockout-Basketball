@@ -127,7 +127,6 @@ public class GameManager : MonoBehaviour
 
         // Add to the player's total score, based on distance from hoop
         float distance = Vector3.Distance(positionWhenThrown, hoop.transform.position);
-        Debug.Log(distance);
 
         int points = 1;
         if (distance > 12.5f)
