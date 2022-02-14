@@ -1,125 +1,180 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+// Used by other methods to check what part of gameplay we're in
+public enum GameState { setup, playing, victory, gameOver };
 
 public class GameManager : MonoBehaviour
 {
     // GameManager holds static reference to itself so all other scripts can access
     public static GameManager S;
+    public GameState gameState;
 
-    // TODO: Gameplay variables (time, score, total basketballs left, etc.)
+    // Gameplay variables (time, score, total basketballs left, etc.)
+    public int totalTime = 90; // Total time for a single shot (in seconds)
+    public float timeLeft;
+    public int totalBalls = 30; // Total number of basketballs at start
+    public int ballsLeft;
+    public int score; // Player's score in points
+    public int round; // How many times the player has scored
+    public int koCount; // TODO: How to use this?
 
-    // Maintains access to all NPC's in the scene (set in Editor)
-    public GameObject[] defenders1, defenders2, defenders3;
+    // UI Elements which display the gameplay variables
+    public Text scoreText, timerText, ballText, scoreReport;
 
-    [SerializeField] 
-    public Text scoreAmount; // egchan added, not sure best order
-    public Text scoreReport;
-    public Text koAmount;
+    public GameObject endScreen;
 
-    // Section represents how far the player is from the hoop,
-    // and how many points they get for a successful shot at this distance.
-    public int section = 3;
-    public int score = 0;
-    public int totalKO = 0;
+    // TODO: Maintains access to all NPC's in the scene?
 
     private void Awake()
     {
-        S = this;
-
-        if (defenders1 == null || defenders2 == null || defenders3 == null)
-        {
-            Debug.Log("You forgot to set the defenders in the GameManger.");
-        }
+        // Ensures there is exactly 1 game manager across all scene reloads
+        if (S == null)
+            S = this;
+        else
+            Destroy(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
+        // Start in the setup phase
+        gameState = GameState.setup;
+
+        // Check for UI variables
+        if (timerText == null || scoreText == null || ballText == null)
+            Debug.LogError("Forgot to include the UI text in GameManager.");
+
         // Initialize gameplay variables
+        score = 0;
+        koCount = 0;
 
-
-        // Start the first row of defenders
-        ActivateRow(defenders1, null);
+        // Set the remaining variables
+        StartRound();
     }
 
-    private void Update() {
-        // TODO: Temporary until we have menus
-        if (Input.GetKeyDown(KeyCode.Escape))
+    private void StartRound()
+    {
+        // Initialize gameplay variables based on the current round
+
+        // TODO: Set the total time: decrease by 5 sec each round
+        timeLeft = totalTime - (round * 5.0f);
+
+        // TODO: Reduce total number of basketballs by 1 each round
+        ballsLeft = totalBalls - round;
+
+        // Update the UI with initial gameplay values
+        timerText.text = "0:" + Mathf.FloorToInt(timeLeft % 60).ToString();
+        ballText.text = ballsLeft.ToString("0");
+        // Update score, just in case
+        scoreText.text = score.ToString("0");
+
+        // Start playing the game
+        gameState = GameState.playing;
+    }
+
+    private void Update()
+    {
+        if (gameState == GameState.playing)
         {
-            Application.Quit();
+            // TODO: Not the most elegant way to do this
+            if (timeLeft > 0.0f)
+            {
+                // Continually decrement the timer
+                timeLeft -= Time.deltaTime;
+            }
+
+            if (timeLeft <= 0.0f)
+            {
+                // Trigger a game over when time runs out
+                StartCoroutine(GameOver());
+            }
+            else
+            {
+                timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
+            }
         }
     }
 
-    /* When the player gets the ball through the hoop */
-    public void PlayerScored()
+    /* When the player throws a basketball */
+    public void BallThrown()
     {
-        // Add to the player's total score, based on section
-        score += section;
-        scoreAmount.text = score.ToString("0");
-        scoreReport.text = "You scored " + score.ToString("0") + " points! Nice Job!";
-        Debug.Log("You just scored " + section + " points! Your new total score is " + score + ".");
+        // Decrease the total number of balls left
+        ballsLeft--;
+
+        // Update the UI to reflect the decrease
+        ballText.text = ballsLeft.ToString("0");
     }
 
     public void OpponentHit()
     {
-        //egchan KO count
-        totalKO += 1;
-        Debug.Log("K.O!!!");
+        // egchan KO count
+        koCount += 1;
 
         // UI element not currently implemented
         // koAmount.text = totalKO.ToString("0");
     }
 
-    /* When a player teleports to their teammate's position */
-    public void BeginNextSection(int teamId)
+    /* When the player gets the ball through the hoop */
+    public void PlayerScored()
     {
-        if (teamId == 2)
-        {
-            section = 2;
-            ActivateRow(defenders2, defenders1);
-        }
-        else if (teamId == 1)
-        {
-            section = 1;
-            ActivateRow(defenders3, defenders2);
-        }
-        else
-        {
-            Debug.LogError("Player has begun section below Section 1.");
-        }
+        // Update the round counter
+        round++;
+
+        // Add to the player's total score, based on section
+        // TODO: Apply basketball score rules
+        score += 1;
+
+        // Update the score value in the UI
+        scoreText.text = score.ToString("0");
+        // scoreReport.text = "You scored " + score.ToString("0") + " points! Nice Job!";
+        // Debug.Log("You just scored " + 1 + " points! Your new total score is " + score + ".");
+
+        // Celebrate the basket, then reset the scene
+        // StartCoroutine(Celebrate());
     }
 
-    private void ActivateRow(GameObject[] activeDefenders, GameObject[] disableDefenders)
+    public IEnumerator Celebrate()
     {
-        // Activate the given set of defenders
-        if (activeDefenders != null)
-        {   
-            foreach (GameObject defender in activeDefenders)
-            {
-                // Defender may have been destroyed by a ball
-                if (defender != null)
-                {
-                    NPCMovement move = defender.GetComponent<NPCMovement>();
-                    if (move != null)
-                        move.enabled = true;
-                }
-            }
-        }
+        // Switch to the victory state
+        gameState = GameState.victory;
 
-        // Disable the given set of defenders
-        if (disableDefenders != null)
-        {
-            foreach (GameObject defender in disableDefenders)
-            {
-                // Defender may have been destroyed by a ball
-                if (defender != null)
-                {
-                    // TODO: Is this the correct approach?
-                    // Also, make sure this doesn't trigger any sort of points/credit for player
-                    Destroy(defender);
-                }
-            }
-        }
+        // TODO: Play a victory sound effect?
+
+        // TODO: Put up UI image?
+
+        // Wait for a couple seconds
+        yield return new WaitForSeconds(3.0f);
+
+        // Reset the field for the next round
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        // Reset the gameplay variables for the new round
+        // StartRound();
+    }
+
+    public IEnumerator GameOver()
+    {
+        // Switch to the game over state
+        gameState = GameState.gameOver;
+
+        // Wait for a couple seconds
+        yield return new WaitForSeconds(3.0f);
+
+        // TODO: Activate the end screen
+        endScreen.SetActive(true);
+
+        // TODO: Update end screen values
+        if (score == 1)
+            scoreReport.text = "You scored 1 point! Nice Job!";
+        else
+            scoreReport.text = "You scored " + score + " points! Nice Job!";
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

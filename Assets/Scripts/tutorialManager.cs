@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class tutorialManager : MonoBehaviour
+public class TutorialManager : MonoBehaviour
 {
     public GameObject[] popUps;
     public int popUpIndex = 0;

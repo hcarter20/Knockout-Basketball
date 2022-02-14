@@ -3,16 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class pauseMenu : MonoBehaviour {   
+public class PauseMenu : MonoBehaviour {   
     
     public static bool GamePaused = false;
+    public static PauseMenu menu;
     
-    public GameObject PauseMenu;
-    public GameObject ControlMenu;
-    public GameObject SettingMenu;
+    public GameObject PauseScreen;
+    public GameObject ControlScreen;
+    public GameObject SettingScreen;
+
+    private void Awake()
+    {
+        // Prevent the UI from being destroyed when we reload the scene
+        if (menu == null)
+            menu = this;
+        else
+            Destroy(gameObject);
+    }
 
     // Update is called once per frame
-    void Update () {
+    void Update() {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GamePaused)
@@ -26,46 +36,46 @@ public class pauseMenu : MonoBehaviour {
         }
     }
 
-    public void Resume ()
+    public void Resume()
     {
-        PauseMenu.SetActive(false);
+        PauseScreen.SetActive(false);
         Time.timeScale = 1;
         GamePaused = false;
     }
 
 
-    public void Pause ()
+    void Pause()
     {
-        PauseMenu.SetActive(true);
+        PauseScreen.SetActive(true);
         Time.timeScale = 0;
         GamePaused = true;
     }
 
-    public void controlLoad ()
+    public void ControlLoad()
     {
-        PauseMenu.SetActive(false);
-        ControlMenu.SetActive(true);
+        PauseScreen.SetActive(false);
+        ControlScreen.SetActive(true);
     }
 
-    public void controlReturn ()
+    public void ControlReturn()
     {
-        ControlMenu.SetActive(false);
-        PauseMenu.SetActive(true);
+        ControlScreen.SetActive(false);
+        PauseScreen.SetActive(true);
     }
 
-    public void settingLoad ()
+    public void SettingLoad()
     {
-        PauseMenu.SetActive(false);
-        SettingMenu.SetActive(true);
+        PauseScreen.SetActive(false);
+        SettingScreen.SetActive(true);
     }
 
-    public void settingReturn ()
+    public void SettingReturn()
     {
-        SettingMenu.SetActive(false);
-        PauseMenu.SetActive(true);
+        SettingScreen.SetActive(false);
+        PauseScreen.SetActive(true);
     }
 
-    public void returnMenu()
+    public void ReturnMenu()
     {
         Time.timeScale = 1;
         GamePaused = false;

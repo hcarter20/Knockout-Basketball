@@ -16,9 +16,6 @@ public class TeamController : MonoBehaviour
 
             // Player has successively passed the ball to teammate
             PlayerControl.player.Teleport(gameObject);
-
-            // Tell the GameManager to activate the next row
-            GameManager.S.BeginNextSection(id);
         }
     }
 }

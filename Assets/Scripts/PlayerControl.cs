@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour
     public Vector3 midThrowVector = new Vector3(0.0f, 1.0f, 1.0f); // Arbitrary default value
     public Vector3 highThrowVector = new Vector3(0.0f, 2.0f, 1.0f); // Arbitrary default value
     private GameObject currentBall;
+    private GameObject thrownBall;
     // Set when the ball is about to be thrown (meter moving)
     public bool isThrowing = false;
     // Speed of the power meter (angle of the ball)
@@ -41,6 +42,9 @@ public class PlayerControl : MonoBehaviour
 
     // Used by other NPC's to check if the player is moving
     public bool isMoving;
+
+    // Keeps track of how many NPC's are currently touching
+    public int npcsTouching = 0;
 
     private void Awake()
     {
@@ -73,9 +77,34 @@ public class PlayerControl : MonoBehaviour
         // Update the player's movement, based on keyboard input
         UpdateMovement();
 
-        // Check ball positioning input
-        if (currentBall != null)
-            UpdateBall();
+        // Can only throw the ball during gameplay?
+        if (GameManager.S.gameState == GameState.playing)
+        {
+            // When player isn't holding ball, check if need to spawn one
+            if (currentBall == null)
+            {
+
+                // If player starts to throw when ball isn't present,
+                // automatically destroy previous ball (and therefore create a new one)
+                if (Input.GetButtonDown("Fire") || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    // Destroy the previously thrown ball
+                    thrownBall.GetComponent<Throwable>().SelfDestroy();
+
+                    // Spawn a new ball immediately
+                    SpawnBall();
+                }
+                // If the thrown ball is also destroyed already, spawn a new one automatically
+                else if (thrownBall == null)
+                    SpawnBall();
+
+            }
+
+            // Update the current ball's position/throw power, or throw the ball
+            // (Separate if statement - should trigger same frame as above)
+            if (currentBall != null)
+                UpdateBall();
+        }
     }
 
     private void UpdateMovement()
@@ -119,7 +148,6 @@ public class PlayerControl : MonoBehaviour
 
             // Initialize the meter at minimum power
             throwSpeed = minThrowSpeed;
-
         }
         // Check if the fire button was first released this frame
         else if (Input.GetButtonUp("Fire"))
@@ -200,23 +228,40 @@ public class PlayerControl : MonoBehaviour
         throwScript.Throw(throwVector.normalized * throwSpeed);
 
         // This ball will prompt us to spawn a new one when it destroys itself
+        thrownBall = currentBall;
         currentBall = null;
+
+        // Tell the GameManager that we've used one of our basketballs
+        GameManager.S.BallThrown();
     }
 
     public void SpawnBall()
     {
-        // First, instantiate a new instance from the prefab
-        currentBall = Instantiate(ballPrefab, transform);
-
-        // When spawn a new ball, maintain the same height as the previous throw
-        if (currentHeight == ShootHeight.Low)
-            currentBall.transform.localPosition = lowPosition;
-        else if (currentHeight == ShootHeight.Mid)
-            currentBall.transform.localPosition = midPosition;
-        else if (currentHeight == ShootHeight.High)
-            currentBall.transform.localPosition = highPosition;
+        // Check if there is a ball left from the game manager
+        if (GameManager.S.ballsLeft <= 0)
+        {
+            // To prevent the method from double-calling the game over state
+            if (GameManager.S.gameState == GameState.playing)
+            {
+                // Trigger a game over when player runs out of basketballs
+                StartCoroutine(GameManager.S.GameOver());
+            }
+        }
         else
-            Debug.LogError("Can't position ball at undefined height.");
+        {
+            // First, instantiate a new instance from the prefab
+            currentBall = Instantiate(ballPrefab, transform);
+
+            // When spawn a new ball, maintain the same height as the previous throw
+            if (currentHeight == ShootHeight.Low)
+                currentBall.transform.localPosition = lowPosition;
+            else if (currentHeight == ShootHeight.Mid)
+                currentBall.transform.localPosition = midPosition;
+            else if (currentHeight == ShootHeight.High)
+                currentBall.transform.localPosition = highPosition;
+            else
+                Debug.LogError("Can't position ball at undefined height.");
+        }
     }
 
     public void Teleport(GameObject teammate)
@@ -238,18 +283,4 @@ public class PlayerControl : MonoBehaviour
         // Re-enable character controller after teleport
         controller.enabled = true;
     }
-
-    // TODO: When the player clicks on a part of the screen, use raycast to get direction,
-    // then spawn a basketball and apply force to send it in that direction.
-
-    // When basketball collides with an NPC, it knocks them over, cardboard cutout style.
-
-    // TODO: Player is able to move right/left, forward/back, and the camera follows them.
-    // Also allow for rotation?
-    // Control the camera with the mouse, or with the keyboard? Or both?
-
-    // TODO: Does your cursor position determine the camera's rotation,
-    // or do you control that independently with the keyboard?
-    // With keyboard is possibly more complex, but allows for more freedom of throwing.
-    // Otherwise, will always throw at center of screen, with keyboard prompt or click?
 }

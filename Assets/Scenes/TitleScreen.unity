@@ -1140,6 +1140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 642986446}
   Settings: {fileID: 402678518}
+  FirstLevelName: ArenaScene
 --- !u!4 &714317136
 Transform:
   m_ObjectHideFlags: 0
