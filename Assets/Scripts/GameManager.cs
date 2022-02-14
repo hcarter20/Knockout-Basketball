@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 
         // Set the remaining variables
         StartRound();
-        FindObjectOfType<audioManagement>().Play("crowd");
+        audioManagement.instance.Play("crowd");
     }
 
     private void StartRound()
@@ -174,6 +174,9 @@ public class GameManager : MonoBehaviour
 
         // Wait for a couple seconds
         yield return new WaitForSeconds(3.0f);
+
+        // Crowd cheer at the end
+        audioManagement.instance.Play("crowd");
 
         // Destroy the player's ball, if one exists
         Destroy(PlayerControl.player.currentBall);
