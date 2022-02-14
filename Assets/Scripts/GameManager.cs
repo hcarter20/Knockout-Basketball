@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] 
     public Text scoreAmount; // egchan added, not sure best order
+    public Text scoreReport;
     public Text koAmount;
 
     // Section represents how far the player is from the hoop,
@@ -22,6 +23,11 @@ public class GameManager : MonoBehaviour
     public int section = 3;
     public int score = 0;
     public int totalKO = 0;
+
+    //egchan tutorial trying to get it to run >:(
+    public GameObject[] popUps;
+    public int popUpIndex = 0;
+
 
     private void Awake()
     {
@@ -42,13 +48,41 @@ public class GameManager : MonoBehaviour
         ActivateRow(defenders1, null);
     }
 
-    private void Update()
-    {
+    private void Update() {
         // TODO: Temporary until we have menus
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
+        //egchan: tutorial manager
+        for (int i = 0; i < popUps.Length; i++) {
+            if(i == popUpIndex){
+                popUps[popUpIndex].SetActive(true);
+            } else {
+                popUps[popUpIndex].SetActive(false);
+            }
+
+        if(popUpIndex == 0){
+            if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)){
+                popUpIndex+=1;
+            }
+        } else if(popUpIndex == 1){
+            if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)){
+                popUpIndex+=1;
+            }
+        } else if(popUpIndex == 2){
+            if(Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)){
+                popUpIndex+=1;
+            }
+        } else if(popUpIndex == 3){
+            if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)){
+                popUpIndex+=1;
+            }
+        } else if(popUpIndex == 4){
+            if(Input.GetKeyDown(KeyCode.Space)){
+                popUpIndex+=1;
+            }
+        }}
     }
 
     /* When the player gets the ball through the hoop */
@@ -57,6 +91,7 @@ public class GameManager : MonoBehaviour
         // Add to the player's total score, based on section
         score += section;
         scoreAmount.text = score.ToString("0");
+        scoreReport.text = "You scored " + score.ToString("0") + " points! Nice Job!";
         Debug.Log("You just scored " + section + " points! Your new total score is " + score + ".");
     }
 
