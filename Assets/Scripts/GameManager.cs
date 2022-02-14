@@ -84,13 +84,16 @@ public class GameManager : MonoBehaviour
             {
                 // Continually decrement the timer
                 timeLeft -= Time.deltaTime;
-                timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
             }
 
             if (timeLeft <= 0.0f)
             {
                 // Trigger a game over when time runs out
                 StartCoroutine(GameOver());
+            }
+            else
+            {
+                timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
             }
         }
     }
