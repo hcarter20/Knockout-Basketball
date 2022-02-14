@@ -24,10 +24,10 @@ public class GameManager : MonoBehaviour
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
-
     public GameObject endScreen;
 
-    // TODO: Maintains access to all NPC's in the scene?
+    // Position of the hoop, for determining score of a throw
+    public GameObject hoop;
 
     private void Awake()
     {
@@ -118,14 +118,23 @@ public class GameManager : MonoBehaviour
     }
 
     /* When the player gets the ball through the hoop */
-    public void PlayerScored()
+    public void PlayerScored(Vector3 positionWhenThrown)
     {
         // Update the round counter
         round++;
 
-        // Add to the player's total score, based on section
+        // Add to the player's total score, based on distance from hoop
+        float distance = Vector3.Distance(positionWhenThrown, hoop.transform.position);
+        Debug.Log(distance);
+
+        int points = 1;
+        if (distance > 12.5f)
+            points = 3;
+        else if (distance > 7.0f)
+            points = 2;
+
         // TODO: Apply basketball score rules
-        score += 1;
+        score += points;
 
         // Update the score value in the UI
         scoreText.text = score.ToString("0");

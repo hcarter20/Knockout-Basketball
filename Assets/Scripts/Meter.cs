@@ -22,7 +22,7 @@ public class Meter : MonoBehaviour
     private void Update()
     {
         // Don't rely on call, automatically update meter if player is trying to throw
-        if (PlayerControl.player.isThrowing)
+        if (PlayerControl.player != null && PlayerControl.player.isThrowing)
         {
             SetMarker();
         }

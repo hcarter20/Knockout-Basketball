@@ -877,6 +877,7 @@ MonoBehaviour:
   ballText: {fileID: 696535142}
   scoreReport: {fileID: 1777879778}
   endScreen: {fileID: 35312386}
+  hoop: {fileID: 800419424}
 --- !u!4 &494547337
 Transform:
   m_ObjectHideFlags: 0
