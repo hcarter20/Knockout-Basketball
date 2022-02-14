@@ -30,7 +30,7 @@ public class audioManagement : MonoBehaviour
     }
 
     void Start (){
-        Play("music");
+         FindObjectOfType<audioManagement>().Play("backgroundMusic");
     }
 
     public void Play (string name){
