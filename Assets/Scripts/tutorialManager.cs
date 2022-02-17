@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TutorialManager : MonoBehaviour
+public class tutorialManager : MonoBehaviour
 {
     // Holds the UI text object which displays instructions
     public Text popUpText;
