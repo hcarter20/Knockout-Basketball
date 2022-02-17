@@ -1,43 +1,80 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    public GameObject[] popUps;
-    public int popUpIndex = 0;
+    // Holds the UI text object which displays instructions
+    public Text popUpText;
 
-    void Update() {
-        for (int i = 0; i < popUps.Length; i++) {
-            if(i == popUpIndex){
-                popUps[popUpIndex].SetActive(true);
-            } else {
-                popUps[popUpIndex].SetActive(false);
+    // How long do we pause when moving to the next instruction?
+    public float pauseTime;
+
+    // The list of text instructions for each instruction step
+    private readonly int instrCount = 6;
+    private readonly string[] instrText = 
+        {
+            "Move with W and S",
+            "Strafe with A and D",
+            "Rotate with left and right arrows",
+            "Angle shot with up and down arrows",
+            "Hold spacebar to charge throw",
+            "Release spacebar to throw"
+        };
+
+    // Which control are we currently introducing
+    private int popUpIndex;
+    // Used to transition between instructions with delay
+    private bool switching;
+
+
+    private void Start()
+    {
+        // Start with wasd movement controls
+        popUpIndex = 0;
+        popUpText.text = instrText[0];
+        switching = false;
+    }
+
+    private void Update() {
+        // If we're switching, then player has already used the correct controls
+        if (!switching)
+        {
+            // Check if the player is using the controls we indicate
+            bool usedControl = (popUpIndex == 0 && Input.GetAxisRaw("Vertical") != 0.0f)
+                || (popUpIndex == 1 && Input.GetAxisRaw("Horizontal") != 0.0f)
+                || (popUpIndex == 2 && Input.GetAxisRaw("HorizontalAlt") != 0.0f)
+                || (popUpIndex == 3 && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)))
+                || (popUpIndex == 4 && Input.GetButtonDown("Fire"))
+                || (popUpIndex == 5 && Input.GetButtonUp("Fire"));
+            
+            if (usedControl)
+            {
+                // Move on to the next instruction
+                switching = true;
+                StartCoroutine(NextStep());
             }
         }
+    }
 
-        if(popUpIndex == 0){
-            if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)){
-                popUpIndex+=1;
-            }
-        } else if(popUpIndex == 1){
-            if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)){
-                popUpIndex+=1;
-            }
-        } else if(popUpIndex == 2){
-            if(Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)){
-                popUpIndex+=1;
-            }
-        } else if(popUpIndex == 3){
-            if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)){
-                popUpIndex+=1;
-            }
-        } else if(popUpIndex == 4){
-            if(Input.GetKeyDown(KeyCode.Space)){
-                popUpIndex+=1;
-            }
-        } else if(popUpIndex == 5){
-            //do nothing?
+    private IEnumerator NextStep()
+    {
+        // TODO: Play audio cue? Signal success?
+
+        // Wait for a moment
+        yield return new WaitForSeconds(pauseTime);
+
+        // Move on to the next instruction
+        switching = false;
+        popUpIndex++;
+
+        if (popUpIndex < instrCount)
+            popUpText.text = instrText[popUpIndex];
+        else
+        {
+            // TODO: How to end the tutorial?
+            popUpText.text = "";
         }
     }
 }
