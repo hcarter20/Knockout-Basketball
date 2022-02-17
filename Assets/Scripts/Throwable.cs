@@ -112,10 +112,13 @@ public class Throwable : MonoBehaviour
                         explosion.transform.parent = null;
                     }
 
-                    audioManagement.instance.Play("hitNPC1");
-                    audioManagement.instance.Play("hitNPC2");
-                    int r = Mathf.FloorToInt(Random.Range(1, 5.9f));
-                    audioManagement.instance.Play(r.ToString());
+                    if (audioManagement.instance != null)
+                    {
+                        audioManagement.instance.Play("hitNPC1");
+                        audioManagement.instance.Play("hitNPC2");
+                        int r = Mathf.FloorToInt(Random.Range(1, 5.9f));
+                        audioManagement.instance.Play(r.ToString());
+                    }
 
                     // Destroy the ball immediately
                     SelfDestroy();
