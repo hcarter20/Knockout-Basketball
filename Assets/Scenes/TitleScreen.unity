@@ -856,7 +856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -876,8 +876,8 @@ Canvas:
   m_GameObject: {fileID: 402678518}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 391061689}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
   m_ReceivesEvents: 1
@@ -2112,7 +2112,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.9150085, y: 0.8925781}
+  m_AnchoredPosition: {x: -2.915039, y: 0.8925781}
   m_SizeDelta: {x: 44.585, y: 34.325}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1537683406
@@ -3032,17 +3032,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
+  - name: backgroundMusic
+    clip: {fileID: 8300000, guid: 3ea17b2fe32b8c5449418c00efc732ce, type: 3}
+    volume: 0.102
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
   - name: hitNPC1
     clip: {fileID: 8300000, guid: 01717969949143a4dbea579459a5c2b5, type: 3}
     volume: 0.314
     pitch: 1
     loop: 0
-    source: {fileID: 0}
-  - name: backgroundMusic
-    clip: {fileID: 8300000, guid: 3ea17b2fe32b8c5449418c00efc732ce, type: 3}
-    volume: 0.157
-    pitch: 1
-    loop: 1
     source: {fileID: 0}
   - name: hitNPC2
     clip: {fileID: 8300000, guid: b60eb6a08feba4d4094d489c225b44bc, type: 3}
@@ -3118,7 +3118,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: squeak
     clip: {fileID: 8300000, guid: 630622525eea9984b81c7997d0c70e79, type: 3}
-    volume: 0.214
+    volume: 0.152
     pitch: 1
     loop: 0
     source: {fileID: 0}
