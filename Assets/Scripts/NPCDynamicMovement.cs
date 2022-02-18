@@ -8,7 +8,8 @@ public class NPCDynamicMovement : MonoBehaviour
     public float moveSpeed = 2.0f; // Arbitrary default value
 
     // How close does the NPC try to get to the player?
-    public float goalDist = 2.0f; // Arbitrary default value
+    public float goalDist = 1.0f; // Arbitrary default value
+    public Vector3 goalPositionOffset;
 
     // Should the NPC try to approach the player?
     public bool approachPlayer = true;
@@ -29,12 +30,14 @@ public class NPCDynamicMovement : MonoBehaviour
     {
         if (movementEnabled)
         {// Are we trying to get near the player?
-            if (approachPlayer /* && PlayerControl.player.isMoving */ && GameManager.S.gameState == GameState.playing)
+            if (approachPlayer && GameManager.S.gameState == GameState.playing)
             {
                 // Get the current position of the player
                 Vector3 playerPosition = PlayerControl.player.transform.position;
+                // Figure out our target position offset from the player
+                Vector3 targetPosition = playerPosition + goalPositionOffset;
 
-                float dist = Vector3.Distance(transform.position, playerPosition);
+                float dist = Vector3.Distance(transform.position, targetPosition);
 
                 // Are we within our goal distance from the player?
                 if (dist < goalDist)
@@ -54,12 +57,9 @@ public class NPCDynamicMovement : MonoBehaviour
                         atPlayer = false;
                         GameManager.S.npcsTouching--;
                     }
-                    // Move closer to the player
-                    transform.position = Vector3.MoveTowards(transform.position, playerPosition, moveSpeed * Time.deltaTime);
+                    // Move closer to the target position (relative to player)
+                    transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 }
-
-                // Turn to face the player
-
             }
         }
     }
