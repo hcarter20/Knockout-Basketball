@@ -3040,7 +3040,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: backgroundMusic
     clip: {fileID: 8300000, guid: 3ea17b2fe32b8c5449418c00efc732ce, type: 3}
-    volume: 0.153
+    volume: 0.157
     pitch: 1
     loop: 1
     source: {fileID: 0}
@@ -3058,7 +3058,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: crowd
     clip: {fileID: 8300000, guid: ca660e737ddd7f644a9d670826ae448b, type: 3}
-    volume: 0.276
+    volume: 0.168
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -3107,6 +3107,18 @@ MonoBehaviour:
   - name: buzzer
     clip: {fileID: 8300000, guid: 0ddef26f4d4b0a1488a9653fc971c4c0, type: 3}
     volume: 0.476
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: pop
+    clip: {fileID: 8300000, guid: 68b8e6be057cbe1409600fd93ad95f50, type: 3}
+    volume: 0.35
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: squeak
+    clip: {fileID: 8300000, guid: 630622525eea9984b81c7997d0c70e79, type: 3}
+    volume: 0.214
     pitch: 1
     loop: 0
     source: {fileID: 0}

@@ -1496,14 +1496,13 @@ MonoBehaviour:
   koCount: 0
   npcsTouching: 0
   flashing: 0
-  flashOn: 0
   scoreText: {fileID: 822287403}
   timerText: {fileID: 507575329}
   ballText: {fileID: 696535142}
   scoreReport: {fileID: 1777879778}
   endScreen: {fileID: 35312386}
   penaltyHighlight: {fileID: 939738903}
-  hoop: {fileID: 0}
+  hoop: {fileID: 976435179}
 --- !u!4 &494547337
 Transform:
   m_ObjectHideFlags: 0
@@ -3244,6 +3243,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 969994369}
   m_CullTransparentMesh: 1
+--- !u!1 &976435179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4461325488451000569, guid: 66340ef17a23a3f4ba29497972a616e1, type: 3}
+  m_PrefabInstance: {fileID: 57067689}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &985574539
 GameObject:
   m_ObjectHideFlags: 0
@@ -5361,9 +5365,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23527c6506a1f8c428d5efadbb93fc7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PauseScreen: {fileID: 1449295842}
-  ControlScreen: {fileID: 422134448}
-  SettingScreen: {fileID: 9099878187319683305}
+  PauseScreen: {fileID: 0}
+  ControlScreen: {fileID: 0}
+  SettingScreen: {fileID: 0}
 --- !u!114 &1619758818
 MonoBehaviour:
   m_ObjectHideFlags: 0

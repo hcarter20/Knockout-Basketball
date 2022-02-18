@@ -123,16 +123,18 @@ public class PlayerControl : MonoBehaviour
 
         if (playerMove != Vector3.zero)
         {
+            
             // Note that the player is moving
             isMoving = true;
-
             // Use the CharacterController to move the player
             controller.Move(playerMove * Time.deltaTime);
+            //audioManagement.instance.Pause("squeak");
         }
         else
         {
             // Note that the player isn't moving
             isMoving = false;
+            audioManagement.instance.Play("squeak"); //egchan sound
         }
 
         // TODO: Camera rotation (limit rotation?)

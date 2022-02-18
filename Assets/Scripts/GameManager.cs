@@ -88,7 +88,6 @@ public class GameManager : MonoBehaviour
             if (timeLeft > 0.0f)
             {
                 // Continually decrement the timer
-                audioManagement.instance.Play("tick");
                 timeLeft -= Time.deltaTime + (npcsTouching * 0.01f);
                 StartCoroutine(Penalty()); //egchan, update penalty visual
             }
@@ -101,6 +100,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                //audioManagement.instance.Play("tick");
                 timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
             }
         }
