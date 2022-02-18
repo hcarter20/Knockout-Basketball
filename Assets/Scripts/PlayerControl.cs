@@ -6,10 +6,13 @@ using UnityEngine.UI;
 public class PlayerControl : MonoBehaviour
 {
     // Used below for choosing ball position, relative to camera
-    public enum ShootHeight { High, Mid, Low };
+    public enum ShootHeight { High, Low };
 
     // Only ever one player in a scene, so static access from other classes
     public static PlayerControl player;
+
+    // Used for animating the player's arms
+    public Animator armAnimator;
 
     // Used to control player movement
     public CharacterController controller;
@@ -19,7 +22,6 @@ public class PlayerControl : MonoBehaviour
     // Used for throwing the ball
     public GameObject ballPrefab;
     public Vector3 lowThrowVector = new Vector3(0.0f, 1.0f, 4.0f); // Arbitrary default value
-    public Vector3 midThrowVector = new Vector3(0.0f, 1.0f, 1.0f); // Arbitrary default value
     public Vector3 highThrowVector = new Vector3(0.0f, 2.0f, 1.0f); // Arbitrary default value
     public GameObject currentBall;
     private GameObject thrownBall;
@@ -34,7 +36,6 @@ public class PlayerControl : MonoBehaviour
     // Position of the ball relative to player camera based on mode
     // These are default values, otherwise customize through the editor
     public Vector3 lowPosition = new Vector3(0.0f, -0.8f, 1f);
-    public Vector3 midPosition = new Vector3(0.0f, -0.4f, 1.5f);
     public Vector3 highPosition = new Vector3(0.0f, 0.5f, 1.7f);
 
     // Current ball position, represented as a mode (choice of target)
@@ -57,6 +58,7 @@ public class PlayerControl : MonoBehaviour
         // Set the initial state
         isThrowing = false;
         isMoving = false;
+        currentHeight = ShootHeight.Low;
 
         // Try to find the CharacterController if necessary
         if (controller == null)
@@ -79,12 +81,11 @@ public class PlayerControl : MonoBehaviour
             UpdateMovement();
 
             // Can only throw the ball during gameplay?
-            if (GameManager.S.gameState == GameState.playing)
+            if (GameManager.S.gameState == GameState.playing || GameManager.S.gameState == GameState.development)
             {
                 // When player isn't holding ball, check if need to spawn one
                 if (currentBall == null)
                 {
-
                     // If player starts to throw when ball isn't present,
                     // automatically destroy previous ball (and therefore create a new one)
                     if (Input.GetButtonDown("Fire") || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
@@ -185,31 +186,17 @@ public class PlayerControl : MonoBehaviour
             // Get input on the arrows keys to indicate position swap
             // float vertArrow = Input.GetAxisRaw("VerticalAlt");
 
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow) && currentHeight == ShootHeight.High)
             {
-                if (currentHeight == ShootHeight.High)
-                {
-                    currentHeight = ShootHeight.Mid;
-                    currentBall.transform.localPosition = midPosition;
-                }
-                else if (currentHeight == ShootHeight.Mid)
-                {
-                    currentHeight = ShootHeight.Low;
-                    currentBall.transform.localPosition = lowPosition;
-                }
+                currentHeight = ShootHeight.Low;
+                currentBall.transform.localPosition = lowPosition;
+                armAnimator.SetBool("LowArm", true);
             }
-            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            else if (Input.GetKeyDown(KeyCode.UpArrow) && currentHeight == ShootHeight.Low)
             {
-                if (currentHeight == ShootHeight.Low)
-                {
-                    currentHeight = ShootHeight.Mid;
-                    currentBall.transform.localPosition = midPosition;
-                }
-                else if (currentHeight == ShootHeight.Mid)
-                {
-                    currentHeight = ShootHeight.High;
-                    currentBall.transform.localPosition = highPosition;
-                }
+                currentHeight = ShootHeight.High;
+                currentBall.transform.localPosition = highPosition;
+                armAnimator.SetBool("LowArm", false);
             }
         }
     }
@@ -224,12 +211,14 @@ public class PlayerControl : MonoBehaviour
 
         if (currentHeight == ShootHeight.High)
             throwVector = highThrowVector;
-        else if (currentHeight == ShootHeight.Mid)
-            throwVector = midThrowVector;
         else if (currentHeight == ShootHeight.Low)
             throwVector = lowThrowVector;
 
         throwScript.Throw(throwVector.normalized * throwSpeed);
+
+        // Trigger the throwing animation
+        armAnimator.ResetTrigger("Throw");
+        armAnimator.SetTrigger("Throw");
 
         // This ball will prompt us to spawn a new one when it destroys itself
         thrownBall = currentBall;
@@ -259,8 +248,6 @@ public class PlayerControl : MonoBehaviour
             // When spawn a new ball, maintain the same height as the previous throw
             if (currentHeight == ShootHeight.Low)
                 currentBall.transform.localPosition = lowPosition;
-            else if (currentHeight == ShootHeight.Mid)
-                currentBall.transform.localPosition = midPosition;
             else if (currentHeight == ShootHeight.High)
                 currentBall.transform.localPosition = highPosition;
             else

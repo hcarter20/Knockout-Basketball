@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // Used by other methods to check what part of gameplay we're in
-public enum GameState { setup, playing, victory, gameOver };
+public enum GameState { setup, playing, victory, gameOver, development };
 
 public class GameManager : MonoBehaviour
 {
     // GameManager holds static reference to itself so all other scripts can access
     public static GameManager S;
-    public GameState gameState;
+    public GameState gameState = GameState.setup;
 
     // Gameplay variables (time, score, total basketballs left, etc.)
     public int totalTime = 90; // Total time for a single shot (in seconds)
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Start in the setup phase
-        gameState = GameState.setup;
+        // gameState = GameState.setup;
 
         // Check for UI variables
         if (timerText == null || scoreText == null || ballText == null)
@@ -79,7 +79,8 @@ public class GameManager : MonoBehaviour
         scoreText.text = score.ToString("0");
 
         // Start playing the game
-        gameState = GameState.playing;
+        if (gameState != GameState.development)
+            gameState = GameState.playing;
     }
 
     private void Update()
@@ -119,6 +120,9 @@ public class GameManager : MonoBehaviour
     /* When the player throws a basketball */
     public void BallThrown()
     {
+        if (gameState == GameState.development)
+            return;
+
         // Decrease the total number of balls left
         ballsLeft--;
 
