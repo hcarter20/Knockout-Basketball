@@ -22,10 +22,13 @@ public class GameManager : MonoBehaviour
     public int round; // How many times the player has scored
     public int koCount; // TODO: How to use this?
     public int npcsTouching;
+    //egchan UI cue penalty
+    public bool flashing;
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
     public GameObject endScreen;
+    public GameObject penaltyHighlight;
 
     // Position of the hoop, for determining score of a throw
     public GameObject hoop;
@@ -55,7 +58,6 @@ public class GameManager : MonoBehaviour
 
         // Set the remaining variables
         StartRound();
-        FindObjectOfType<audioManagement>().Play("crowd");
     }
 
     private void StartRound()
@@ -86,11 +88,14 @@ public class GameManager : MonoBehaviour
             if (timeLeft > 0.0f)
             {
                 // Continually decrement the timer
+                audioManagement.instance.Play("tick");
                 timeLeft -= Time.deltaTime + (npcsTouching * 0.01f);
+                StartCoroutine(Penalty()); //egchan, update penalty visual
             }
 
             if (timeLeft <= 0.0f)
             {
+                audioManagement.instance.Play("buzzer");
                 // Trigger a game over when time runs out
                 StartCoroutine(GameOver());
             }
@@ -120,6 +125,28 @@ public class GameManager : MonoBehaviour
         // koAmount.text = totalKO.ToString("0");
     }
 
+    public IEnumerator Penalty() //egchan penalty marker on clock
+    {
+        if (npcsTouching > 0)
+        {
+            flashing = true;
+            //Debug.LogError("watch out for the kids!");
+        }
+        else if (npcsTouching == 0)
+        {
+            flashing = false;
+            //Debug.LogError("no threat at the moment");
+        }
+
+        if (flashing == true)
+        {
+            penaltyHighlight.SetActive(true);
+            yield return new WaitForSeconds(.5f);
+            penaltyHighlight.SetActive(false);
+            yield return new WaitForSeconds(.5f);
+        }
+    }
+
     /* When the player gets the ball through the hoop */
     public void PlayerScored(Vector3 positionWhenThrown)
     {
@@ -128,7 +155,6 @@ public class GameManager : MonoBehaviour
 
         // Add to the player's total score, based on distance from hoop
         float distance = Vector3.Distance(positionWhenThrown, hoop.transform.position);
-        Debug.Log(distance);
 
         int points = 1;
         if (distance > 12.5f)
@@ -152,9 +178,8 @@ public class GameManager : MonoBehaviour
     {
         // Switch to the victory state
         gameState = GameState.victory;
-
+        
         // TODO: Play a victory sound effect?
-
         // TODO: Put up UI image?
 
         // Wait for a couple seconds
@@ -173,7 +198,11 @@ public class GameManager : MonoBehaviour
         gameState = GameState.gameOver;
 
         // Wait for a couple seconds
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f); //egchan Changing time to 2, 3 is a bit long
+
+        // Crowd cheer at the end
+        audioManagement.instance.Play("crowd");
+        
 
         // Destroy the player's ball, if one exists
         Destroy(PlayerControl.player.currentBall);
@@ -184,6 +213,8 @@ public class GameManager : MonoBehaviour
         // TODO: Update end screen values
         if (score == 1)
             scoreReport.text = "You scored 1 point! Nice Job!";
+        else if (score == 0)
+            scoreReport.text = "You scored no points. Nice Try!"; //egchan added
         else
             scoreReport.text = "You scored " + score + " points! Nice Job!";
     }

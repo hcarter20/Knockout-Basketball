@@ -13,7 +13,12 @@ public class Throwable : MonoBehaviour
     // Prevent ball from acting while still held
     public bool isThrown = false;
 
+    // Position when ball is initial thrown
     public Vector3 positionWhenThrown;
+    public float forceWhenThrown;
+
+    // Prefab of an explosion, triggered when thrown hard enough
+    public GameObject explosionPrefab;
 
     void Start()
     {
@@ -43,6 +48,9 @@ public class Throwable : MonoBehaviour
         // Apply physics force to the ball
         rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
 
+        // Save the thrown force, for explosion check later
+        forceWhenThrown = throwVector.magnitude;
+
         // Remove control of the game object from player
         transform.parent = null;
 
@@ -68,7 +76,7 @@ public class Throwable : MonoBehaviour
 
         // Destroy this game object
         Destroy(gameObject);
-        FindObjectOfType<audioManagement>().Play("ballExplode");
+        // FindObjectOfType<audioManagement>().Play("ballExplode");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -79,8 +87,8 @@ public class Throwable : MonoBehaviour
             {
                 // GOAL! Tell the GameManager we scored, and our location at the start
                 GameManager.S.PlayerScored(positionWhenThrown);
-                FindObjectOfType<audioManagement>().Play("net");
-                FindObjectOfType<audioManagement>().Play("cheer");
+                audioManagement.instance.Play("net");
+                audioManagement.instance.Play("cheer");
             }
         }
     }
@@ -97,10 +105,23 @@ public class Throwable : MonoBehaviour
                 // If we knock out an NPC, then destroy this ball
                 if (npc.KnockOut())
                 {
+                    // If we hit the NPC hard enough, trigger an explosion
+                    if (forceWhenThrown > 13.5f)
+                    {
+                        GameObject explosion = Instantiate(explosionPrefab, transform);
+                        explosion.transform.parent = null;
+                    }
+
+                    if (audioManagement.instance != null)
+                    {
+                        audioManagement.instance.Play("hitNPC1");
+                        audioManagement.instance.Play("hitNPC2");
+                        int r = Mathf.FloorToInt(Random.Range(1, 5.9f));
+                        audioManagement.instance.Play(r.ToString());
+                    }
+
                     // Destroy the ball immediately
                     SelfDestroy();
-                    FindObjectOfType<audioManagement>().Play("hitNPC1");
-                    FindObjectOfType<audioManagement>().Play("hitNPC2");
                 }
             }
         }

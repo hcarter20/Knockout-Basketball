@@ -7,7 +7,7 @@ public class TitleMenu : MonoBehaviour
 {
     public GameObject Title;
     public GameObject Settings;
-    public string FirstLevelName;
+    public string FirstLevelName, TutorialLevelName;
 
     public void PlayGame () 
     {
@@ -29,5 +29,10 @@ public class TitleMenu : MonoBehaviour
     {
         Title.SetActive(true);
         Settings.SetActive(false);
+    }
+
+    public void TutorialLoad()
+    {
+        SceneManager.LoadScene(TutorialLevelName);
     }
 }
