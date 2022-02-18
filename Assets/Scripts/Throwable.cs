@@ -101,8 +101,6 @@ public class Throwable : MonoBehaviour
                     SelfDestroy();
                     FindObjectOfType<audioManagement>().Play("hitNPC1");
                     FindObjectOfType<audioManagement>().Play("hitNPC2");
-                    int r = random.Next(1,5);
-                    FindObjectOfType<audioManagement>().Play(r.ToString());
                 }
             }
         }
