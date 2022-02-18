@@ -73,7 +73,7 @@ public class Throwable : MonoBehaviour
     public void SelfDestroy()
     {
         // TODO: Animation? Sound effect?
-
+        audioManagement.instance.Play("pop");
         // Destroy this game object
         Destroy(gameObject);
         // FindObjectOfType<audioManagement>().Play("ballExplode");
