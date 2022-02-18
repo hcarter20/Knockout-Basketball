@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     // Gameplay variables (time, score, total basketballs left, etc.)
     public int totalTime = 90; // Total time for a single shot (in seconds)
     public float timeLeft;
+    private float secondCountdown;
     public int totalBalls = 30; // Total number of basketballs at start
     public int ballsLeft;
     public int score; // Player's score in points
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
     public int koCount; // TODO: How to use this?
     public int npcsTouching;
     //egchan UI cue penalty
-    public bool flashing;
+    // public bool flashing; // For now, let's leave it all red when penalized
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
@@ -66,12 +67,13 @@ public class GameManager : MonoBehaviour
 
         // TODO: Set the total time: decrease by 5 sec each round
         timeLeft = totalTime - (round * 5.0f);
+        secondCountdown = 1.0f;
 
         // TODO: Reduce total number of basketballs by 1 each round
         ballsLeft = totalBalls - round;
 
         // Update the UI with initial gameplay values
-        timerText.text = "0:" + Mathf.FloorToInt(timeLeft % 60).ToString();
+        timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
         ballText.text = ballsLeft.ToString("0");
         // Update score, just in case
         scoreText.text = score.ToString("0");
@@ -84,24 +86,32 @@ public class GameManager : MonoBehaviour
     {
         if (gameState == GameState.playing)
         {
+            // Turn on the highlight if the player is being touched by NPC
+            penaltyHighlight.SetActive(npcsTouching > 0);
+
             // TODO: Not the most elegant way to do this
             if (timeLeft > 0.0f)
             {
-                // Continually decrement the timer
-                timeLeft -= Time.deltaTime + (npcsTouching * 0.01f);
-                StartCoroutine(Penalty()); //egchan, update penalty visual
+                // Decrement the second timer
+                secondCountdown -= Time.deltaTime + (npcsTouching * 0.01f);
+                if (secondCountdown <= 0.0f)
+                {
+                    // Decrease the timeLeft value
+                    timeLeft -= 1.0f - secondCountdown;
+                    timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
+
+                    // Reset the second countdown
+                    secondCountdown = 1.0f;
+
+                    // Play tick sound for second decrement
+                    audioManagement.instance.Play("tick");
+                }
             }
 
             if (timeLeft <= 0.0f)
             {
-                audioManagement.instance.Play("buzzer");
                 // Trigger a game over when time runs out
                 StartCoroutine(GameOver());
-            }
-            else
-            {
-                //audioManagement.instance.Play("tick");
-                timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
             }
         }
     }
@@ -123,28 +133,6 @@ public class GameManager : MonoBehaviour
 
         // UI element not currently implemented
         // koAmount.text = totalKO.ToString("0");
-    }
-
-    public IEnumerator Penalty() //egchan penalty marker on clock
-    {
-        if (npcsTouching > 0)
-        {
-            flashing = true;
-            //Debug.LogError("watch out for the kids!");
-        }
-        else if (npcsTouching == 0)
-        {
-            flashing = false;
-            //Debug.LogError("no threat at the moment");
-        }
-
-        if (flashing == true)
-        {
-            penaltyHighlight.SetActive(true);
-            yield return new WaitForSeconds(.5f);
-            penaltyHighlight.SetActive(false);
-            yield return new WaitForSeconds(.5f);
-        }
     }
 
     /* When the player gets the ball through the hoop */
@@ -197,17 +185,19 @@ public class GameManager : MonoBehaviour
         // Switch to the game over state
         gameState = GameState.gameOver;
 
+        // Play the buzzer sound to indicate game is over
+        audioManagement.instance.Play("buzzer");
+
+        // Destroy the player's ball, if one exists
+        Destroy(PlayerControl.player.currentBall);
+
         // Wait for a couple seconds
         yield return new WaitForSeconds(2.0f); //egchan Changing time to 2, 3 is a bit long
 
         // Crowd cheer at the end
         audioManagement.instance.Play("crowd");
         
-
-        // Destroy the player's ball, if one exists
-        Destroy(PlayerControl.player.currentBall);
-
-        // TODO: Activate the end screen
+        // TODO: Switch to the end scene instead
         endScreen.SetActive(true);
 
         // TODO: Update end screen values

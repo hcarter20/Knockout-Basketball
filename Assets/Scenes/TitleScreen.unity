@@ -3100,7 +3100,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: tick
     clip: {fileID: 8300000, guid: 4a26994c23e004b42afd27beb7d245f3, type: 3}
-    volume: 0.62
+    volume: 0.1
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -3118,7 +3118,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: squeak
     clip: {fileID: 8300000, guid: 630622525eea9984b81c7997d0c70e79, type: 3}
-    volume: 0.152
+    volume: 0.05
     pitch: 1
     loop: 0
     source: {fileID: 0}

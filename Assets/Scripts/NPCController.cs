@@ -35,6 +35,13 @@ public class NPCController : MonoBehaviour
             // NPC should stop moving (TODO: Is this the best approach?)
             moveScript.movementEnabled = false;
 
+            if (moveScript.atPlayer)
+            {
+                // Stop affecting the player
+                moveScript.atPlayer = false;
+                GameManager.S.npcsTouching--;
+            }
+
             // Notify the GameManager that an opponent has been KO'ed
             GameManager.S.OpponentHit();
 

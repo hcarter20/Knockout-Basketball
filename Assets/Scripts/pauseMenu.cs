@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseMenu : MonoBehaviour {   
+public class pauseMenu : MonoBehaviour {   
     
     public static bool GamePaused = false;
-    public static PauseMenu menu;
+    public static pauseMenu menu;
     
     public GameObject PauseScreen;
     public GameObject ControlScreen;
