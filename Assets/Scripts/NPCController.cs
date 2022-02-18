@@ -9,11 +9,10 @@ public class NPCController : MonoBehaviour
     public Rigidbody rb;
 
     // The NPCMovement script attached to this game object
-    public Component moveScript;
+    public NPCDynamicMovement moveScript;
 
-    //egchan trying to count knocked NPCs
-    [SerializeField] Text koAmount;
-    public int koed = 0;
+    // The amount of time in seconds it takes for an NPC to reset when defeated
+    public float respawnTime = 45.0f;
 
     void Start()
     {
@@ -29,23 +28,45 @@ public class NPCController : MonoBehaviour
         }
     }
 
-    public void Collide(GameObject collisionObject) {
-        // NPC should stop moving (TODO: Is this the best approach?)
-        Destroy(moveScript);
+    public bool KnockOut() {
+        // If we haven't been hit before, moveScript should still be active
+        if (moveScript.movementEnabled)
+        {
+            // NPC should stop moving (TODO: Is this the best approach?)
+            moveScript.movementEnabled = false;
 
-        // TODO: Should the ball disappear, or at least not be able to pass to teammate?
-        // Or is it funnier if you can pass to a teammate by bouncing off an NPC?
-        Destroy(collisionObject);
+            if (moveScript.atPlayer)
+            {
+                // Stop affecting the player
+                moveScript.atPlayer = false;
+                GameManager.S.npcsTouching--;
+            }
 
-        // TODO: Should the NPC disappear after a while?
+            // Notify the GameManager that an opponent has been KO'ed
+            GameManager.S.OpponentHit();
 
-        // Notify the GameManager that an opponent has been KO'ed
-        GameManager.S.OpponentHit();
+            // Start preparing to respawn
+            StartCoroutine(Respawn());
+
+            // Tell the ball that it got a KO
+            return true;
+        }
+
+        // If we've already been knocked out before, return false
+        return false;
     }
 
-    /* egchan : take score value to ui */
-    private void updateKoUI()
+    public IEnumerator Respawn()
     {
-        koAmount.text = koed.ToString("0");
+        // Wait to respawn for a while
+        yield return new WaitForSeconds(respawnTime);
+
+        // Reset the position of this npc
+        Vector3 currentPosition = transform.position;
+        transform.position = new Vector3(currentPosition.x, 0.75f, currentPosition.z);
+        transform.rotation = Quaternion.identity;
+
+        // Re-enable the movement script
+        moveScript.movementEnabled = true;
     }
 }

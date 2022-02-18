@@ -8,10 +8,17 @@ public class Throwable : MonoBehaviour
     public Rigidbody rb;
 
     // How long the ball should stick around after thrown
-    public float lifespanTimer = 3.0f; // arbitrary default value
+    public float lifespanTimer = 5.0f; // arbitrary default value
 
     // Prevent ball from acting while still held
     public bool isThrown = false;
+
+    // Position when ball is initial thrown
+    public Vector3 positionWhenThrown;
+    public float forceWhenThrown;
+
+    // Prefab of an explosion, triggered when thrown hard enough
+    public GameObject explosionPrefab;
 
     void Start()
     {
@@ -35,8 +42,14 @@ public class Throwable : MonoBehaviour
         // Re-activate physics (this also re-activates gravity)
         rb.isKinematic = false;
 
+        // Save our current position, for scoring
+        positionWhenThrown = transform.position;
+
         // Apply physics force to the ball
         rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
+
+        // Save the thrown force, for explosion check later
+        forceWhenThrown = throwVector.magnitude;
 
         // Remove control of the game object from player
         transform.parent = null;
@@ -53,16 +66,17 @@ public class Throwable : MonoBehaviour
         // Wait out the timer
         yield return new WaitForSeconds(lifespanTimer);
 
-        // TODO: Animation? Sound effect?
-
-        // Destroy this game object
-        Destroy(gameObject);
+        // In a separate method, so we can avoid the timer if necessary
+        SelfDestroy();
     }
 
-    public void OnDestroy()
+    public void SelfDestroy()
     {
-        // Tell the player to spawn a new ball
-        PlayerControl.player.SpawnBall();
+        // TODO: Animation? Sound effect?
+        audioManagement.instance.Play("pop");
+        // Destroy this game object
+        Destroy(gameObject);
+        // FindObjectOfType<audioManagement>().Play("ballExplode");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,8 +85,10 @@ public class Throwable : MonoBehaviour
         {
             if (other.gameObject.CompareTag("Hoop"))
             {
-                // GOAL! Tell the GameManager we scored
-                GameManager.S.PlayerScored();
+                // GOAL! Tell the GameManager we scored, and our location at the start
+                GameManager.S.PlayerScored(positionWhenThrown);
+                audioManagement.instance.Play("net");
+                audioManagement.instance.Play("cheer");
             }
         }
     }
@@ -85,7 +101,28 @@ public class Throwable : MonoBehaviour
             {
                 // Tell the NPC that it's been hit
                 NPCController npc = collision.gameObject.GetComponent<NPCController>();
-                npc.Collide(gameObject);
+
+                // If we knock out an NPC, then destroy this ball
+                if (npc.KnockOut())
+                {
+                    // If we hit the NPC hard enough, trigger an explosion
+                    if (forceWhenThrown > 13.5f)
+                    {
+                        GameObject explosion = Instantiate(explosionPrefab, transform);
+                        explosion.transform.parent = null;
+                    }
+
+                    if (audioManagement.instance != null)
+                    {
+                        audioManagement.instance.Play("hitNPC1");
+                        audioManagement.instance.Play("hitNPC2");
+                        int r = Mathf.FloorToInt(Random.Range(1, 5.9f));
+                        audioManagement.instance.Play(r.ToString());
+                    }
+
+                    // Destroy the ball immediately
+                    SelfDestroy();
+                }
             }
         }
     }
