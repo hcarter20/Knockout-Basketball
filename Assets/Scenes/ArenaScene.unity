@@ -470,11 +470,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66340ef17a23a3f4ba29497972a616e1, type: 3}
---- !u!1 &57067690 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4461325489057207081, guid: 66340ef17a23a3f4ba29497972a616e1, type: 3}
-  m_PrefabInstance: {fileID: 57067689}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &77509258
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1594,7 +1589,6 @@ MonoBehaviour:
   totalBalls: 30
   ballsLeft: 0
   score: 0
-  round: 0
   koCount: 0
   npcsTouching: 0
   scoreText: {fileID: 822287403}
@@ -1603,7 +1597,6 @@ MonoBehaviour:
   scoreReport: {fileID: 1777879778}
   endScreen: {fileID: 35312386}
   penaltyHighlight: {fileID: 939738903}
-  hoop: {fileID: 57067690}
 --- !u!4 &494547337
 Transform:
   m_ObjectHideFlags: 0
@@ -7569,7 +7562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1614159276766180524, guid: 1872994b056b24c4ebf8cafdcd83bec7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.67
+      value: -11.01
       objectReference: {fileID: 0}
     - target: {fileID: 1614159276766180524, guid: 1872994b056b24c4ebf8cafdcd83bec7, type: 3}
       propertyPath: m_LocalRotation.w

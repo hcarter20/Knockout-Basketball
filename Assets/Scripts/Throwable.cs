@@ -96,11 +96,23 @@ public class Throwable : MonoBehaviour
             if (other.gameObject.CompareTag("Hoop"))
             {
                 // GOAL! Tell the GameManager we scored, and our location at the start
-                GameManager.S.PlayerScored(positionWhenThrown);
+                GameManager.S.PlayerScored(other.gameObject.transform.position, positionWhenThrown, false);
+
                 if (audioManagement.instance != null)
                 {
                     audioManagement.instance.Play("net");
                     audioManagement.instance.Play("cheer");
+                }
+            }
+            else if (other.gameObject.CompareTag("WrongHoop"))
+            {
+                // GOAL! Tell the GameManager we scored, and our location at the start
+                GameManager.S.PlayerScored(other.gameObject.transform.position, positionWhenThrown, true);
+
+                if (audioManagement.instance != null)
+                {
+                    audioManagement.instance.Play("net");
+                    // TODO: Audience boos you?
                 }
             }
         }
