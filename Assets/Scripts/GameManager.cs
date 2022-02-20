@@ -99,20 +99,24 @@ public class GameManager : MonoBehaviour
                 {
                     // Decrease the timeLeft value
                     timeLeft -= 1.0f - secondCountdown;
-                    timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
-
                     // Reset the second countdown
                     secondCountdown = 1.0f;
 
                     // Play tick sound for second decrement
-                    audioManagement.instance.Play("tick");
+                    if (audioManagement.instance != null)
+                        audioManagement.instance.Play("tick");
                 }
             }
 
             if (timeLeft <= 0.0f)
             {
                 // Trigger a game over when time runs out
+                timerText.text = "0:00";
                 StartCoroutine(GameOver());
+            }
+            else
+            {
+                timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
             }
         }
     }
@@ -190,7 +194,8 @@ public class GameManager : MonoBehaviour
         gameState = GameState.gameOver;
 
         // Play the buzzer sound to indicate game is over
-        audioManagement.instance.Play("buzzer");
+        if (audioManagement.instance != null)
+            audioManagement.instance.Play("buzzer");
 
         // Destroy the player's ball, if one exists
         Destroy(PlayerControl.player.currentBall);
@@ -199,7 +204,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f); //egchan Changing time to 2, 3 is a bit long
 
         // Crowd cheer at the end
-        audioManagement.instance.Play("crowd");
+        if (audioManagement.instance != null)
+            audioManagement.instance.Play("crowd");
         
         // TODO: Switch to the end scene instead
         endScreen.SetActive(true);

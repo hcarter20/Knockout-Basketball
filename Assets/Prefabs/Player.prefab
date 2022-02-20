@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1614159275262995662}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1614159275672694624}
@@ -180,20 +180,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armAnimator: {fileID: 1614159276162278470}
   controller: {fileID: 1614159276766180522}
-  moveSpeed: 10
-  rotateSpeed: 1
+  moveSpeed: 8
+  rotateSpeed: 70
   ballPrefab: {fileID: 9121507428848948023, guid: 6d450836ecb05ac44b451879bece9116, type: 3}
   lowThrowVector: {x: 0, y: 1, z: 5}
   highThrowVector: {x: 0, y: 2, z: 1}
   currentBall: {fileID: 0}
   isThrowing: 0
-  meterSpeed: 2.5
+  meterSpeed: 4
   throwSpeed: 7
   minThrowSpeed: 7
   maxThrowSpeed: 14
   lower: 0
-  lowPosition: {x: 0, y: -0.8, z: 1}
-  highPosition: {x: 0, y: 0.5, z: 1.7}
+  lowPosition: {x: 0, y: 0.2, z: 1}
+  highPosition: {x: 0, y: 1.5, z: 1.7}
   currentHeight: 2
   isMoving: 0
   npcsTouching: 0

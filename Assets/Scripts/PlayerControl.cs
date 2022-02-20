@@ -122,12 +122,16 @@ public class PlayerControl : MonoBehaviour
         playerMove = transform.TransformDirection(playerMove);
         playerMove = Vector3.ClampMagnitude(playerMove, moveSpeed);
 
+        // Apply gravity manually
+        if (!controller.isGrounded)
+            playerMove.y = -9.8f;
+
         if (playerMove != Vector3.zero)
         {
-            
             // Note that the player is moving
             isMoving = true;
-            // Use the CharacterController to move the player
+
+            // Use the CharacterController to move the player (SimpleMove prevents flying)
             controller.Move(playerMove * Time.deltaTime);
             //audioManagement.instance.Pause("squeak");
         }
@@ -135,11 +139,12 @@ public class PlayerControl : MonoBehaviour
         {
             // Note that the player isn't moving
             isMoving = false;
-            audioManagement.instance.Play("squeak"); //egchan sound
+            if (audioManagement.instance != null)
+                audioManagement.instance.Play("squeak"); //egchan sound
         }
 
         // TODO: Camera rotation (limit rotation?)
-        float yRotation = Input.GetAxis("HorizontalAlt") * rotateSpeed;
+        float yRotation = Input.GetAxisRaw("HorizontalAlt") * rotateSpeed * Time.deltaTime;
         transform.localRotation *= Quaternion.Euler(0f, yRotation, 0f);
     }
 
@@ -181,7 +186,9 @@ public class PlayerControl : MonoBehaviour
                 // Otherwise, update the throw speed
                 throwSpeed = Mathf.MoveTowards(throwSpeed, goalThrowSpeed, meterSpeed * Time.deltaTime);
         }
-        else
+       
+        // Player can adjust the height of the ball while charging up
+        if (currentBall != null)
         {
             // Get input on the arrows keys to indicate position swap
             // float vertArrow = Input.GetAxisRaw("VerticalAlt");
@@ -190,13 +197,15 @@ public class PlayerControl : MonoBehaviour
             {
                 currentHeight = ShootHeight.Low;
                 currentBall.transform.localPosition = lowPosition;
-                armAnimator.SetBool("LowArm", true);
+                if (armAnimator != null && armAnimator.isActiveAndEnabled)
+                    armAnimator.SetBool("LowArm", true);
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow) && currentHeight == ShootHeight.Low)
             {
                 currentHeight = ShootHeight.High;
                 currentBall.transform.localPosition = highPosition;
-                armAnimator.SetBool("LowArm", false);
+                if (armAnimator != null && armAnimator.isActiveAndEnabled)
+                    armAnimator.SetBool("LowArm", false);
             }
         }
     }
@@ -217,8 +226,11 @@ public class PlayerControl : MonoBehaviour
         throwScript.Throw(throwVector.normalized * throwSpeed);
 
         // Trigger the throwing animation
-        armAnimator.ResetTrigger("Throw");
-        armAnimator.SetTrigger("Throw");
+        if (armAnimator != null && armAnimator.isActiveAndEnabled)
+        {
+            armAnimator.ResetTrigger("Throw");
+            armAnimator.SetTrigger("Throw");
+        }
 
         // This ball will prompt us to spawn a new one when it destroys itself
         thrownBall = currentBall;
