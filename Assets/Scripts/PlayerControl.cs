@@ -32,7 +32,9 @@ public class PlayerControl : MonoBehaviour
     public float throwSpeed; // Arbitrary default value
     public float minThrowSpeed = 7.0f; // Arbitrary default value
     public float maxThrowSpeed = 14.0f; // Arbitrary default value
-    public bool lower = false;
+    public float maxPowerTimeTotal = 1.0f;
+    private float maxPowerTime;
+
     // Position of the ball relative to player camera based on mode
     // These are default values, otherwise customize through the editor
     public Vector3 lowPosition = new Vector3(0.0f, -0.8f, 1f);
@@ -90,8 +92,9 @@ public class PlayerControl : MonoBehaviour
                     // automatically destroy previous ball (and therefore create a new one)
                     if (Input.GetButtonDown("Fire") || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
                     {
+                        // Experimental: try leaving the previous ball
                         // Destroy the previously thrown ball
-                        thrownBall.GetComponent<Throwable>().SelfDestroy();
+                        // thrownBall.GetComponent<Throwable>().SelfDestroy();
 
                         // Spawn a new ball immediately
                         SpawnBall();
@@ -99,7 +102,6 @@ public class PlayerControl : MonoBehaviour
                     // If the thrown ball is also destroyed already, spawn a new one automatically
                     else if (thrownBall == null)
                         SpawnBall();
-
                 }
 
                 // Update the current ball's position/throw power, or throw the ball
@@ -166,25 +168,33 @@ public class PlayerControl : MonoBehaviour
             if (!isThrowing)
                 Debug.LogError("Attempting to throw the ball without throwing flag set.");
 
+            // Throw the ball
+            ThrowBall();
+
             // Deactivate the throwing flag
             isThrowing = false;
 
-            // Throw the ball
-            ThrowBall();
+            // Reset the meter to minimum power
+            throwSpeed = minThrowSpeed;
         }
 
         // If currently trying holding down button to throw, then update the power
         if (isThrowing)
         {
-            // Which value are we currently moving towards? (min or max)
-            float goalThrowSpeed = lower ? minThrowSpeed : maxThrowSpeed;
-
-            // Reverse the meter direction (rise/fall) when reach the max/min
-            if (Mathf.Abs(goalThrowSpeed - throwSpeed) < 0.1f)
-                lower = !lower;
+            // Reset the meter back to the bottom when reach the max
+            if (Mathf.Abs(maxThrowSpeed - throwSpeed) < 0.1f)
+            {
+                // Stay near max power for a little bit before resetting
+                maxPowerTime -= Time.deltaTime;
+                if (maxPowerTime < 0.0f)
+                {
+                    maxPowerTime = maxPowerTimeTotal;
+                    throwSpeed = minThrowSpeed;
+                }
+            }
             else
                 // Otherwise, update the throw speed
-                throwSpeed = Mathf.MoveTowards(throwSpeed, goalThrowSpeed, meterSpeed * Time.deltaTime);
+                throwSpeed = Mathf.MoveTowards(throwSpeed, maxThrowSpeed, meterSpeed * Time.deltaTime);
         }
        
         // Player can adjust the height of the ball while charging up

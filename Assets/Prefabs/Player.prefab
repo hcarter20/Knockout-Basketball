@@ -191,7 +191,7 @@ MonoBehaviour:
   throwSpeed: 7
   minThrowSpeed: 7
   maxThrowSpeed: 14
-  lower: 0
+  maxPowerTimeTotal: 0.5
   lowPosition: {x: 0, y: 0.2, z: 1}
   highPosition: {x: 0, y: 1.5, z: 1.7}
   currentHeight: 2
