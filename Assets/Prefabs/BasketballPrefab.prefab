@@ -129,9 +129,12 @@ MonoBehaviour:
   rb: {fileID: 6692329902354290438}
   lifespanTimer: 10
   isThrown: 0
-  positionWhenThrown: {x: 0, y: 0, z: 0}
-  forceWhenThrown: 0
+  stunForceCutoff: 9
+  explosiveForceCutoff: 13
   explosionPrefab: {fileID: 4072041520624985204, guid: ac1ad5d1f2a2546879482390b9e331c9, type: 3}
+  explosionRadius: 3
+  explosionPower: 10
+  explosionLift: 2
 --- !u!120 &4100637512801078408
 LineRenderer:
   m_ObjectHideFlags: 0

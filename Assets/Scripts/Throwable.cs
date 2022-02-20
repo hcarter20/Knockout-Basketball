@@ -13,12 +13,21 @@ public class Throwable : MonoBehaviour
     // Prevent ball from acting while still held
     public bool isThrown = false;
 
+    // Any force below this is just a stun
+    public float stunForceCutoff = 8.0f;
+    // Any force above this is an explosion
+    public float explosiveForceCutoff = 13.0f;
+
     // Position when ball is initial thrown
-    public Vector3 positionWhenThrown;
-    public float forceWhenThrown;
+    private Vector3 positionWhenThrown;
+    private float forceWhenThrown;
 
     // Prefab of an explosion, triggered when thrown hard enough
     public GameObject explosionPrefab;
+    // The radius of effect for the explosive force
+    public float explosionRadius = 1.0f; // Arbitrary default value
+    public float explosionPower = 1.0f;  // Arbitrary default value
+    public float explosionLift = 1.0f;   // Arbitrary default value
 
     void Start()
     {
@@ -73,7 +82,8 @@ public class Throwable : MonoBehaviour
     public void SelfDestroy()
     {
         // TODO: Animation? Sound effect?
-        audioManagement.instance.Play("pop");
+        if (audioManagement.instance != null)
+            audioManagement.instance.Play("pop");
         // Destroy this game object
         Destroy(gameObject);
         // FindObjectOfType<audioManagement>().Play("ballExplode");
@@ -87,37 +97,78 @@ public class Throwable : MonoBehaviour
             {
                 // GOAL! Tell the GameManager we scored, and our location at the start
                 GameManager.S.PlayerScored(positionWhenThrown);
-                audioManagement.instance.Play("net");
-                audioManagement.instance.Play("cheer");
+                if (audioManagement.instance != null)
+                {
+                    audioManagement.instance.Play("net");
+                    audioManagement.instance.Play("cheer");
+                }
             }
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (isThrown)
-        {
-            if (collision.gameObject.CompareTag("Opponent"))
-            {
-                // Tell the NPC that it's been hit
-                NPCController npc = collision.gameObject.GetComponent<NPCController>();
+        // Ignore any collisions while still in the player's hands
+        if (!isThrown)
+            return;
 
-                // If we knock out an NPC, then destroy this ball
-                if (npc.KnockOut())
+        if (collision.gameObject.CompareTag("Opponent"))
+        {
+            // Tell the NPC that it's been hit
+            NPCController hitNPC = collision.gameObject.GetComponent<NPCController>();
+
+            // If we hit the NPC too gently, then only stun
+            if (forceWhenThrown < stunForceCutoff)
+            {
+                // If we stun an NPC, then destroy this ball
+                if (hitNPC.Stun())
                 {
-                    // If we hit the NPC hard enough, trigger an explosion
-                    if (forceWhenThrown > 13.5f)
+                    // Play stun hit sound effect(s)
+                    if (audioManagement.instance != null)
                     {
-                        GameObject explosion = Instantiate(explosionPrefab, transform);
-                        explosion.transform.parent = null;
+                        audioManagement.instance.Play("hitNPC1");
+                        audioManagement.instance.Play("hitNPC2");
                     }
 
+                    // Destroy the ball immediately
+                    SelfDestroy();
+                }
+            }
+            else
+            {
+                // If we knock out an NPC, then destroy this ball
+                if (hitNPC.KnockOut())
+                {
                     if (audioManagement.instance != null)
                     {
                         audioManagement.instance.Play("hitNPC1");
                         audioManagement.instance.Play("hitNPC2");
                         int r = Mathf.FloorToInt(Random.Range(1, 5.9f));
                         audioManagement.instance.Play(r.ToString());
+                    }
+
+                    // If we hit the NPC hard enough, trigger an explosion
+                    if (forceWhenThrown > explosiveForceCutoff)
+                    {
+                        // Instantiate the explosion particle effect
+                        GameObject explosion = Instantiate(explosionPrefab, transform);
+                        explosion.transform.parent = null;
+
+                        // Find all opponents within the explosion radius
+                        Collider[] colliders = Physics.OverlapSphere(explosion.transform.position, explosionRadius);
+
+                        // Apply explosive force to them and knock them out
+                        foreach (Collider npcCollider in colliders)
+                        {
+                            // Check if we can knock this NPC out
+                            NPCController npc = npcCollider.gameObject.GetComponent<NPCController>();
+                            if (npc != null)
+                            {
+                                // Apply the explosive force to this NPC & knock out
+                                npc.KnockOut(); // Since this isn't a conditional, explosion force applies to "corpses"
+                                npc.rb.AddExplosionForce(explosionPower, explosion.transform.position, explosionRadius + 2.0f, explosionLift, ForceMode.Impulse);
+                            }
+                        }
                     }
 
                     // Destroy the ball immediately
