@@ -182,7 +182,7 @@ MonoBehaviour:
   controller: {fileID: 1614159276766180522}
   moveSpeed: 8
   rotateSpeed: 70
-  ballPrefab: {fileID: 9121507428848948023, guid: 6d450836ecb05ac44b451879bece9116, type: 3}
+  ballPrefab: {fileID: 5266247336111649748, guid: 424dcf7df89daa747bc44f342464f8cb, type: 3}
   lowThrowVector: {x: 0, y: 1, z: 5}
   highThrowVector: {x: 0, y: 2, z: 1}
   currentBall: {fileID: 0}

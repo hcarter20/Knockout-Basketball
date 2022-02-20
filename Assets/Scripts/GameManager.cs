@@ -197,6 +197,8 @@ public class GameManager : MonoBehaviour
             scoreReport.text = "You scored 1 point! Nice Job!";
         else if (score == 0)
             scoreReport.text = "You scored no points. Nice Try!"; //egchan added
+        else if (score == -1) 
+            scoreReport.text = "You scored -1 point? Nice Work, I guess.";
         else if (score < 0)
             scoreReport.text = "You scored " + score + " points? Nice Work, I guess.";
         else

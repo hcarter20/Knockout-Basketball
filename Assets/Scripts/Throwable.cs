@@ -57,6 +57,9 @@ public class Throwable : MonoBehaviour
         // Apply physics force to the ball
         rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
 
+        // Apply just a little bit of angular momentum, so it appears to rotate
+        rb.angularVelocity = new Vector3(1.0f, 1.0f, 1.0f);
+
         // Save the thrown force, for explosion check later
         forceWhenThrown = throwVector.magnitude;
 
