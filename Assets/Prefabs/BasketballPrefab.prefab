@@ -130,7 +130,8 @@ MonoBehaviour:
   lifespanTimer: 10
   isThrown: 0
   positionWhenThrown: {x: 0, y: 0, z: 0}
-  explosionPrefab: {fileID: 5184125721388399032, guid: 88580769b64e340099a738d5fd513a70, type: 3}
+  forceWhenThrown: 0
+  explosionPrefab: {fileID: 4072041520624985204, guid: ac1ad5d1f2a2546879482390b9e331c9, type: 3}
 --- !u!120 &4100637512801078408
 LineRenderer:
   m_ObjectHideFlags: 0
