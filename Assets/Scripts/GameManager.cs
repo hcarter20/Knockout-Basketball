@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
-    public GameObject endScreen;
+    public string endScreenName;
     public GameObject penaltyHighlight;
 
     // Position of the hoop, for determining score of a throw
@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour
             audioManagement.instance.Play("crowd");
         
         // TODO: Switch to the end scene instead
-        endScreen.SetActive(true);
+        SceneManager.LoadScene(endScreenName);
 
         // TODO: Update end screen values
         if (score == 1)

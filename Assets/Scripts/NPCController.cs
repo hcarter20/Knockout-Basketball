@@ -134,5 +134,8 @@ public class NPCController : MonoBehaviour
 
         // Re-enable the movement script
         moveScript.movementEnabled = true;
+
+        //egchan awake sound
+        audioManagement.instance.Play("alive");
     }
 }
