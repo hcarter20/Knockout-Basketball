@@ -53,9 +53,10 @@ public class Meter : MonoBehaviour
 
         // Just eyeballed it: should clamp between 16 and -16 degrees z-rotation for min/max.
         // egchan: modified angle for masking/ bar fill to 26 deg
+        // haley: modified the bottom angle from 20 deg to 18 deg
         // Max power is top and min power is bottom of meter, use lerp to place marker at current power
         float t = Mathf.InverseLerp(minThrowPower, maxThrowPower, throwPower);
-        Quaternion newAngle = Quaternion.Lerp(Quaternion.Euler(0.0f, 0.0f, 20.0f), Quaternion.Euler(0.0f, 0.0f, -26.0f), t);
+        Quaternion newAngle = Quaternion.Lerp(Quaternion.Euler(0.0f, 0.0f, 18.0f), Quaternion.Euler(0.0f, 0.0f, -26.0f), t);
 
         // Use local rotation, since marker is a child of the meter background.
         marker.transform.localRotation = newAngle;
