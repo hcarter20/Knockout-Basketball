@@ -41,6 +41,8 @@ public class pauseMenu : MonoBehaviour {
         PauseScreen.SetActive(false);
         Time.timeScale = 1;
         GamePaused = false;
+        if (GameManager.S != null)
+            GameManager.S.paused = false;
     }
 
 
@@ -49,6 +51,8 @@ public class pauseMenu : MonoBehaviour {
         PauseScreen.SetActive(true);
         Time.timeScale = 0;
         GamePaused = true;
+        if (GameManager.S != null)
+            GameManager.S.paused = true;
     }
 
     public void ControlLoad()

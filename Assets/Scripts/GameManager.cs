@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     // GameManager holds static reference to itself so all other scripts can access
     public static GameManager S;
     public GameState gameState = GameState.setup;
+    public bool paused;
 
     // Gameplay variables (time, score, total basketballs left, etc.)
     public int totalTime = 90; // Total time for a single shot (in seconds)
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameState == GameState.playing)
+        if (gameState == GameState.playing && !paused)
         {
             // Turn on the highlight if the player is being touched by NPC
             penaltyHighlight.SetActive(npcsTouching > 0);
