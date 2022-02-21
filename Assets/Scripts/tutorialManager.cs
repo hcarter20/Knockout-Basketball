@@ -12,11 +12,9 @@ public class tutorialManager : MonoBehaviour
     public float pauseTime;
 
     // The list of text instructions for each instruction step
-    private readonly int instrCount = 6;
     private readonly string[] instrText = 
         {
-            "Move with W and S",
-            "Strafe with A and D",
+            "Move with WASD",
             "Rotate with left and right arrows",
             "Angle shot with up and down arrows",
             "Hold spacebar to charge throw",
@@ -42,12 +40,11 @@ public class tutorialManager : MonoBehaviour
         if (!switching)
         {
             // Check if the player is using the controls we indicate
-            bool usedControl = (popUpIndex == 0 && Input.GetAxisRaw("Vertical") != 0.0f)
-                || (popUpIndex == 1 && Input.GetAxisRaw("Horizontal") != 0.0f)
-                || (popUpIndex == 2 && Input.GetAxisRaw("HorizontalAlt") != 0.0f)
-                || (popUpIndex == 3 && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)))
-                || (popUpIndex == 4 && Input.GetButtonDown("Fire"))
-                || (popUpIndex == 5 && Input.GetButtonUp("Fire"));
+            bool usedControl = (popUpIndex == 0 && (Input.GetAxisRaw("Vertical") != 0.0f || Input.GetAxisRaw("Horizontal") != 0.0f))
+                || (popUpIndex == 1 && Input.GetAxisRaw("HorizontalAlt") != 0.0f)
+                || (popUpIndex == 2 && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)))
+                || (popUpIndex == 3 && Input.GetButtonDown("Fire"))
+                || (popUpIndex == 4 && Input.GetButtonUp("Fire"));
             
             if (usedControl)
             {
@@ -69,7 +66,7 @@ public class tutorialManager : MonoBehaviour
         switching = false;
         popUpIndex++;
 
-        if (popUpIndex < instrCount)
+        if (popUpIndex < instrText.Length)
             popUpText.text = instrText[popUpIndex];
         else
         {
