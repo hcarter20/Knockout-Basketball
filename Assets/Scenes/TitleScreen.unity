@@ -308,7 +308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: -43.311}
+  m_AnchoredPosition: {x: -105.99, y: -67.169}
   m_SizeDelta: {x: 119.739, y: 43.358}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &31721772
@@ -1597,7 +1597,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: -173.2}
+  m_AnchoredPosition: {x: -105.99, y: -149.34}
   m_SizeDelta: {x: 58.877, y: 40.384}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1076890625
@@ -2378,7 +2378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1636186781
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3034,7 +3034,7 @@ MonoBehaviour:
   sounds:
   - name: backgroundMusic
     clip: {fileID: 8300000, guid: 3ea17b2fe32b8c5449418c00efc732ce, type: 3}
-    volume: 0.102
+    volume: 0.143
     pitch: 1
     loop: 1
     source: {fileID: 0}
@@ -3052,13 +3052,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: cheer
     clip: {fileID: 8300000, guid: a494eee21d04cd141b04f97fc7bbbaa6, type: 3}
-    volume: 0.4
+    volume: 0.307
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: crowd
     clip: {fileID: 8300000, guid: ca660e737ddd7f644a9d670826ae448b, type: 3}
-    volume: 0.168
+    volume: 0.142
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -3112,13 +3112,25 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: pop
     clip: {fileID: 8300000, guid: 68b8e6be057cbe1409600fd93ad95f50, type: 3}
-    volume: 0.35
+    volume: 0.45
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: squeak
     clip: {fileID: 8300000, guid: 630622525eea9984b81c7997d0c70e79, type: 3}
-    volume: 0.05
+    volume: 0.065
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: explode
+    clip: {fileID: 8300000, guid: be7ec3d040bf2f644b0f6474add6e4dc, type: 3}
+    volume: 0.153
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: alive
+    clip: {fileID: 8300000, guid: 6a26b65675f10e046b5bc024da66d4d9, type: 3}
+    volume: 0.194
     pitch: 1
     loop: 0
     source: {fileID: 0}

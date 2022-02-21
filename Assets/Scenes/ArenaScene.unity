@@ -1595,7 +1595,7 @@ MonoBehaviour:
   timerText: {fileID: 507575329}
   ballText: {fileID: 696535142}
   scoreReport: {fileID: 1777879778}
-  endScreen: {fileID: 35312386}
+  endScreenName: EndScreenMain
   penaltyHighlight: {fileID: 939738903}
 --- !u!4 &494547337
 Transform:

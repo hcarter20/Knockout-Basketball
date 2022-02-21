@@ -165,6 +165,8 @@ public class Throwable : MonoBehaviour
                     // If we hit the NPC hard enough, trigger an explosion
                     if (forceWhenThrown > explosiveForceCutoff)
                     {
+                        //egchan explodesound
+                        audioManagement.instance.Play("explode");
                         // Instantiate the explosion particle effect
                         GameObject explosion = Instantiate(explosionPrefab, transform);
                         explosion.transform.parent = null;

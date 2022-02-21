@@ -214,6 +214,9 @@ GameObject:
   - component: {fileID: 482692974}
   - component: {fileID: 482692973}
   - component: {fileID: 482692972}
+  - component: {fileID: 482692976}
+  - component: {fileID: 482692977}
+  - component: {fileID: 482692978}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -306,6 +309,65 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &482692976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482692971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23527c6506a1f8c428d5efadbb93fc7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PauseScreen: {fileID: 0}
+  ControlScreen: {fileID: 0}
+  SettingScreen: {fileID: 0}
+--- !u!114 &482692977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482692971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bba397c14de274eacf9ecd7d9e270d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameState: 0
+  totalTime: 90
+  timeLeft: 0
+  totalBalls: 30
+  ballsLeft: 0
+  score: 0
+  round: 0
+  koCount: 0
+  npcsTouching: 0
+  scoreText: {fileID: 0}
+  timerText: {fileID: 0}
+  ballText: {fileID: 0}
+  scoreReport: {fileID: 0}
+  endScreenName: 
+  penaltyHighlight: {fileID: 0}
+  hoop: {fileID: 0}
+--- !u!114 &482692978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482692971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db292810fbfd164a90806fb69437a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: {fileID: 0}
+  Settings: {fileID: 0}
+  FirstLevelName: ArenaScene
+  TutorialLevelName: TutorialScene
 --- !u!1 &748142931
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,8 +484,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+      - m_Target: {fileID: 482692976}
+        m_TargetAssemblyTypeName: pauseMenu, Assembly-CSharp
         m_MethodName: ReturnMenu
         m_Mode: 1
         m_Arguments:
@@ -558,9 +620,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ResetScene
+      - m_Target: {fileID: 482692978}
+        m_TargetAssemblyTypeName: TitleMenu, Assembly-CSharp
+        m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

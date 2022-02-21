@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
-    public GameObject endScreen;
+    public string endScreenName;
     public GameObject penaltyHighlight;
 
     private void Awake()
@@ -190,7 +190,7 @@ public class GameManager : MonoBehaviour
             audioManagement.instance.Play("crowd");
         
         // TODO: Switch to the end scene instead
-        endScreen.SetActive(true);
+        SceneManager.LoadScene(endScreenName);
 
         // TODO: Update end screen values
         if (score == 1)
