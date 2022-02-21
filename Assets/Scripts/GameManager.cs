@@ -146,6 +146,9 @@ public class GameManager : MonoBehaviour
 
         // Update the score value in the UI
         scoreText.text = score.ToString("0");
+
+        if (tutorialManager.S != null)
+            tutorialManager.S.Scored();
     }
 
 

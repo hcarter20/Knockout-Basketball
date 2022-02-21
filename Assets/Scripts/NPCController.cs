@@ -22,6 +22,8 @@ public class NPCController : MonoBehaviour
     // Used to allow a knock out when stunned
     private bool stunned = false;
 
+    public bool tutorial = false;
+
     void Start()
     {
         // Try to find components if necessary
@@ -57,6 +59,9 @@ public class NPCController : MonoBehaviour
 
             // Start preparing to move again
             StartCoroutine(StartMoving());
+
+            if (tutorial && tutorialManager.S != null)
+                tutorialManager.S.Stunned();
 
             // Tell the ball that it stunned us
             return true;
@@ -108,7 +113,10 @@ public class NPCController : MonoBehaviour
             GameManager.S.OpponentHit();
 
             // Start preparing to respawn
-            StartCoroutine(Respawn());
+            StartCoroutine(Respawn()); 
+            
+            if (tutorial && tutorialManager.S != null)
+                tutorialManager.S.KnockedOut();
 
             // Tell the ball that it got a KO
             return true;
@@ -138,5 +146,8 @@ public class NPCController : MonoBehaviour
 
         //egchan awake sound
         audioManagement.instance.Play("alive");
+
+        if (tutorial && tutorialManager.S != null)
+            tutorialManager.S.Respawned();
     }
 }

@@ -3052,13 +3052,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: cheer
     clip: {fileID: 8300000, guid: a494eee21d04cd141b04f97fc7bbbaa6, type: 3}
-    volume: 0.307
+    volume: 0.281
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: crowd
     clip: {fileID: 8300000, guid: ca660e737ddd7f644a9d670826ae448b, type: 3}
-    volume: 0.142
+    volume: 0.152
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -3100,7 +3100,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: tick
     clip: {fileID: 8300000, guid: 4a26994c23e004b42afd27beb7d245f3, type: 3}
-    volume: 0.1
+    volume: 0.151
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -3118,19 +3118,31 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: squeak
     clip: {fileID: 8300000, guid: 630622525eea9984b81c7997d0c70e79, type: 3}
-    volume: 0.065
+    volume: 0.106
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: explode
     clip: {fileID: 8300000, guid: be7ec3d040bf2f644b0f6474add6e4dc, type: 3}
-    volume: 0.153
+    volume: 0.327
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: alive
     clip: {fileID: 8300000, guid: 6a26b65675f10e046b5bc024da66d4d9, type: 3}
     volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: hitNPC3
+    clip: {fileID: 8300000, guid: 549840f8ecf6c5941b157c359f97505b, type: 3}
+    volume: 0.348
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: boo
+    clip: {fileID: 8300000, guid: ce4e02f958681cd46ae0a4fb2ceee29e, type: 3}
+    volume: 0.322
     pitch: 1
     loop: 0
     source: {fileID: 0}

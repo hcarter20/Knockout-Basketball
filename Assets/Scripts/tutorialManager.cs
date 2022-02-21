@@ -18,7 +18,9 @@ public class tutorialManager : MonoBehaviour
             "Rotate with left and right arrows",
             "Angle shot with up and down arrows",
             "Hold spacebar to charge throw",
-            "Release spacebar to throw"
+            "Release spacebar to throw",
+            "Throw the ball at the child to KO",
+            "Throw the ball into the hoop to get points\nFarther shots are better"
         };
 
     // Which control are we currently introducing
@@ -26,6 +28,15 @@ public class tutorialManager : MonoBehaviour
     // Used to transition between instructions with delay
     private bool switching;
 
+    // Holds a prefab for the NPC's to spawn midway through
+    public GameObject npcPrefab;
+
+    public static tutorialManager S;
+
+    private void Awake()
+    {
+        S = this;
+    }
 
     private void Start()
     {
@@ -57,8 +68,6 @@ public class tutorialManager : MonoBehaviour
 
     private IEnumerator NextStep()
     {
-        // TODO: Play audio cue? Signal success?
-
         // Wait for a moment
         yield return new WaitForSeconds(pauseTime);
 
@@ -66,12 +75,57 @@ public class tutorialManager : MonoBehaviour
         switching = false;
         popUpIndex++;
 
+        if (popUpIndex == 5)
+        {
+            Instantiate(npcPrefab);
+        }
+
         if (popUpIndex < instrText.Length)
             popUpText.text = instrText[popUpIndex];
         else
         {
             // TODO: How to end the tutorial?
+            popUpText.text = "Round ends when time/balls run out";
+            yield return new WaitForSeconds(4.0f);
             popUpText.text = "";
         }
+    }
+
+    public void Stunned()
+    {
+        popUpText.text = "Gentle throws will only stun briefly";
+    }
+
+    public void KnockedOut()
+    {
+        if (popUpIndex == 5)
+        {
+            // Move on to the next instruction
+            switching = true;
+            StartCoroutine(NextStep());
+        }
+    }
+
+    public void Scored()
+    {
+        if (popUpIndex == 6)
+        {
+            // Move on to the next instruction
+            switching = true;
+            StartCoroutine(NextStep());
+        }
+    }
+
+    public void Respawned()
+    {
+        StartCoroutine(RespawnText());
+    }
+
+    private IEnumerator RespawnText()
+    {
+        string prevText = popUpText.text;
+        popUpText.text = "Be careful: Kids will stand back up";
+        yield return new WaitForSeconds(2.0f);
+        popUpText.text = prevText;
     }
 }
