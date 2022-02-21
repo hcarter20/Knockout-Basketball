@@ -12,7 +12,8 @@ public class PlayerControl : MonoBehaviour
     public static PlayerControl player;
 
     // Used for animating the player's arms
-    public Animator armAnimator;
+    public GameObject lowArmModel, highArmModel;
+    public Animator lowArmAnimator, highArmAnimator;
 
     // Used to control player movement
     public CharacterController controller;
@@ -59,6 +60,8 @@ public class PlayerControl : MonoBehaviour
         isThrowing = false;
         isMoving = false;
         currentHeight = ShootHeight.Low;
+        lowArmModel.SetActive(true);
+        highArmModel.SetActive(false);
 
         // Try to find the CharacterController if necessary
         if (controller == null)
@@ -190,13 +193,15 @@ public class PlayerControl : MonoBehaviour
             {
                 currentHeight = ShootHeight.Low;
                 currentBall.transform.localPosition = lowPosition;
-                armAnimator.SetBool("LowArm", true);
+                lowArmModel.SetActive(true);
+                highArmModel.SetActive(false);
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow) && currentHeight == ShootHeight.Low)
             {
                 currentHeight = ShootHeight.High;
                 currentBall.transform.localPosition = highPosition;
-                armAnimator.SetBool("LowArm", false);
+                lowArmModel.SetActive(false);
+                highArmModel.SetActive(true);
             }
         }
     }
@@ -217,8 +222,16 @@ public class PlayerControl : MonoBehaviour
         throwScript.Throw(throwVector.normalized * throwSpeed);
 
         // Trigger the throwing animation
-        armAnimator.ResetTrigger("Throw");
-        armAnimator.SetTrigger("Throw");
+        if (currentHeight == ShootHeight.High)
+        {
+            highArmAnimator.ResetTrigger("Throw");
+            highArmAnimator.SetTrigger("Throw");
+        }
+        else if (currentHeight == ShootHeight.Low)
+        {
+            lowArmAnimator.ResetTrigger("Throw");
+            lowArmAnimator.SetTrigger("Throw");
+        }
 
         // This ball will prompt us to spawn a new one when it destroys itself
         thrownBall = currentBall;
