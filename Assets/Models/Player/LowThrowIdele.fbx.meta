@@ -6,7 +6,22 @@ ModelImporter:
   - first:
       74: 1827226128182048838
     second: lowIdle
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Plaid_Punk_Shirt
+    second: {fileID: 2100000, guid: 17f9ee875b1ea43a79cadaa117350ca3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Std_Nails
+    second: {fileID: 2100000, guid: 2469ed6ec375e48ec94beda8aaf9fbeb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Std_Skin_Arm
+    second: {fileID: 2100000, guid: 2c759fd38444245e18bb01351b0c1f6e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

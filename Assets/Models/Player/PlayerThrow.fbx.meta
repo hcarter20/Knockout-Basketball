@@ -19,7 +19,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Std_Nails
-    second: {fileID: 2100000, guid: 7afed815922914a0a9ec0cbcf39d68df, type: 2}
+    second: {fileID: 2100000, guid: 2469ed6ec375e48ec94beda8aaf9fbeb, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
