@@ -57,6 +57,9 @@ public class Throwable : MonoBehaviour
         // Apply physics force to the ball
         rb.AddRelativeForce(throwVector, ForceMode.VelocityChange);
 
+        // Apply just a little bit of angular momentum, so it appears to rotate
+        rb.angularVelocity = new Vector3(1.0f, 1.0f, 1.0f);
+
         // Save the thrown force, for explosion check later
         forceWhenThrown = throwVector.magnitude;
 
@@ -96,11 +99,24 @@ public class Throwable : MonoBehaviour
             if (other.gameObject.CompareTag("Hoop"))
             {
                 // GOAL! Tell the GameManager we scored, and our location at the start
-                GameManager.S.PlayerScored(positionWhenThrown);
+                GameManager.S.PlayerScored(other.gameObject.transform.position, positionWhenThrown, false);
+
                 if (audioManagement.instance != null)
                 {
                     audioManagement.instance.Play("net");
                     audioManagement.instance.Play("cheer");
+                }
+            }
+            else if (other.gameObject.CompareTag("WrongHoop"))
+            {
+                // GOAL! Tell the GameManager we scored, and our location at the start
+                GameManager.S.PlayerScored(other.gameObject.transform.position, positionWhenThrown, true);
+
+                if (audioManagement.instance != null)
+                {
+                    audioManagement.instance.Play("net");
+                    // TODO: Audience boos you?
+                    audioManagement.instance.Play("boo");
                 }
             }
         }
@@ -142,7 +158,7 @@ public class Throwable : MonoBehaviour
                     if (audioManagement.instance != null)
                     {
                         audioManagement.instance.Play("hitNPC1");
-                        audioManagement.instance.Play("hitNPC2");
+                        audioManagement.instance.Play("hitNPC3");
                         int r = Mathf.FloorToInt(Random.Range(1, 5.9f));
                         audioManagement.instance.Play(r.ToString());
                     }

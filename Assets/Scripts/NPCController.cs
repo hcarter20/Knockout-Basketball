@@ -48,11 +48,12 @@ public class NPCController : MonoBehaviour
             moveScript.movementEnabled = false;
 
             // Cancel the forces applied by the ball to the rigidbody
-            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
 
             // Reset the position of this npc (to cancel falling over)
             Vector3 currentPosition = transform.position;
-            transform.SetPositionAndRotation(new Vector3(currentPosition.x, 0.75f, currentPosition.z), Quaternion.identity);
+            transform.SetPositionAndRotation(new Vector3(currentPosition.x, 0.75f, currentPosition.z), Quaternion.Euler(0f, PlayerControl.player.transform.rotation.eulerAngles.y, 0f));
 
             // Start preparing to move again
             StartCoroutine(StartMoving());
@@ -88,9 +89,9 @@ public class NPCController : MonoBehaviour
             if (stunned)
             {
                 // Cancel the stunned state on this npc
-                stunned = false; 
+                stunned = false;
                 rb.isKinematic = false;
-                StopCoroutine(StartMoving());
+                StopAllCoroutines();
             }
 
             // NPC should stop moving (TODO: Is this the best approach?)

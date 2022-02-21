@@ -9,6 +9,12 @@ public class Meter : MonoBehaviour
     private float minThrowPower, maxThrowPower;
     private float throwPower;
 
+    // Keeps track of whether the meter should be visible
+    private bool isActive = false;
+
+    // The CanvasGroup which controls the transparency of the meter
+    public CanvasGroup canvasGroup;
+
     private void Start()
     {
         // Set the min and max expected power
@@ -19,12 +25,24 @@ public class Meter : MonoBehaviour
         SetMarker();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         // Don't rely on call, automatically update meter if player is trying to throw
-        if (PlayerControl.player != null && PlayerControl.player.isThrowing)
+        if (PlayerControl.player != null)
         {
-            SetMarker();
+            if (PlayerControl.player.isThrowing)
+            {
+                isActive = true;
+                canvasGroup.alpha = 1.0f;
+                SetMarker();
+            }
+            else if (isActive)
+            {
+                // On the first update after the ball is thrown, update marker then deactivate
+                SetMarker();
+                canvasGroup.alpha = 0.33f;
+                isActive = false;
+            }
         }
     }
 

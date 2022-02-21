@@ -20,19 +20,12 @@ public class GameManager : MonoBehaviour
     public int totalBalls = 30; // Total number of basketballs at start
     public int ballsLeft;
     public int score; // Player's score in points
-    public int round; // How many times the player has scored
     public int koCount; // TODO: How to use this?
     public int npcsTouching;
-    //egchan UI cue penalty
-    // public bool flashing; // For now, let's leave it all red when penalized
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
-    public string endScreenName;
-    public GameObject penaltyHighlight;
-
-    // Position of the hoop, for determining score of a throw
-    public GameObject hoop;
+    public GameObject endScreen, penaltyHighlight;
 
     private void Awake()
     {
@@ -58,19 +51,9 @@ public class GameManager : MonoBehaviour
         npcsTouching = 0;
 
         // Set the remaining variables
-        StartRound();
-    }
-
-    private void StartRound()
-    {
-        // Initialize gameplay variables based on the current round
-
-        // TODO: Set the total time: decrease by 5 sec each round
-        timeLeft = totalTime - (round * 5.0f);
+        timeLeft = totalTime;
         secondCountdown = 1.0f;
-
-        // TODO: Reduce total number of basketballs by 1 each round
-        ballsLeft = totalBalls - round;
+        ballsLeft = totalBalls;
 
         // Update the UI with initial gameplay values
         timerText.text = Mathf.FloorToInt(timeLeft / 60).ToString("0") + ":" + Mathf.FloorToInt(timeLeft % 60).ToString("00");
@@ -144,13 +127,10 @@ public class GameManager : MonoBehaviour
     }
 
     /* When the player gets the ball through the hoop */
-    public void PlayerScored(Vector3 positionWhenThrown)
+    public void PlayerScored(Vector3 hoopPosition, Vector3 positionWhenThrown, bool wrong)
     {
-        // Update the round counter
-        round++;
-
-        // Add to the player's total score, based on distance from hoop
-        float distance = Vector3.Distance(positionWhenThrown, hoop.transform.position);
+        // Get the player's score for shot, based on distance from hoop
+        float distance = Vector3.Distance(positionWhenThrown, hoopPosition);
 
         int points = 1;
         if (distance > 12.5f)
@@ -158,17 +138,16 @@ public class GameManager : MonoBehaviour
         else if (distance > 7.0f)
             points = 2;
 
-        // TODO: Apply basketball score rules
-        score += points;
+        // Get negative points if you scored in the wrong hoop
+        if (wrong)
+            score -= points;
+        else
+            score += points;
 
         // Update the score value in the UI
         scoreText.text = score.ToString("0");
-        // scoreReport.text = "You scored " + score.ToString("0") + " points! Nice Job!";
-        // Debug.Log("You just scored " + 1 + " points! Your new total score is " + score + ".");
-
-        // Celebrate the basket, then reset the scene
-        // StartCoroutine(Celebrate());
     }
+
 
     public IEnumerator Celebrate()
     {
@@ -206,15 +185,20 @@ public class GameManager : MonoBehaviour
         // Crowd cheer at the end
         if (audioManagement.instance != null)
             audioManagement.instance.Play("crowd");
-        
+
         // TODO: Switch to the end scene instead
-        SceneManager.LoadScene(endScreenName);
+        // SceneManager.LoadScene(endScreenName);
+        endScreen.SetActive(true);
 
         // TODO: Update end screen values
         if (score == 1)
             scoreReport.text = "You scored 1 point! Nice Job!";
         else if (score == 0)
             scoreReport.text = "You scored no points. Nice Try!"; //egchan added
+        else if (score == -1) 
+            scoreReport.text = "You scored -1 point? Nice Work, I guess.";
+        else if (score < 0)
+            scoreReport.text = "You scored " + score + " points? Nice Work, I guess.";
         else
             scoreReport.text = "You scored " + score + " points! Nice Job!";
     }
