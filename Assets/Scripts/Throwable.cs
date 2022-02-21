@@ -193,5 +193,20 @@ public class Throwable : MonoBehaviour
                 }
             }
         }
+        else if (collision.gameObject.CompareTag("Audience"))
+        {
+            // Play sound effect(s)
+            if (audioManagement.instance != null)
+            {
+                audioManagement.instance.Play("hitNPC1");
+                // Any other sound?
+            }
+
+            // Destroy the audience member?
+            Destroy(collision.gameObject);
+
+            // Destroy the ball immediately
+            SelfDestroy();
+        }
     }
 }

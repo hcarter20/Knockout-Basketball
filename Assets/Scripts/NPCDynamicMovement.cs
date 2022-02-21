@@ -38,9 +38,10 @@ public class NPCDynamicMovement : MonoBehaviour
                 Vector3 targetPosition = playerPosition + goalPositionOffset;
 
                 float dist = Vector3.Distance(transform.position, targetPosition);
+                float absDist = Vector3.Distance(transform.position, playerPosition);
 
-                // Are we within our goal distance from the player?
-                if (dist < goalDist)
+                // Are we within our goal distance from the player (or otherwise very close to the player)?
+                if (dist < goalDist || absDist < goalDist)
                 {
                     if (!atPlayer)
                     {

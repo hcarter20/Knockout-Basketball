@@ -8,6 +8,7 @@ TagManager:
   - Hoop
   - Opponent
   - WrongHoop
+  - Audience
   layers:
   - Default
   - TransparentFX
