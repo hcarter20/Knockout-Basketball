@@ -22,13 +22,10 @@ public class GameManager : MonoBehaviour
     public int score; // Player's score in points
     public int koCount; // TODO: How to use this?
     public int npcsTouching;
-    //egchan UI cue penalty
-    // public bool flashing; // For now, let's leave it all red when penalized
 
     // UI Elements which display the gameplay variables
     public Text scoreText, timerText, ballText, scoreReport;
-    public string endScreenName;
-    public GameObject penaltyHighlight;
+    public GameObject endScreen, penaltyHighlight;
 
     private void Awake()
     {
@@ -188,9 +185,10 @@ public class GameManager : MonoBehaviour
         // Crowd cheer at the end
         if (audioManagement.instance != null)
             audioManagement.instance.Play("crowd");
-        
+
         // TODO: Switch to the end scene instead
-        SceneManager.LoadScene(endScreenName);
+        // SceneManager.LoadScene(endScreenName);
+        endScreen.SetActive(true);
 
         // TODO: Update end screen values
         if (score == 1)

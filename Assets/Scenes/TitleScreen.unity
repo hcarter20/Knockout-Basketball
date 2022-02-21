@@ -3112,7 +3112,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: pop
     clip: {fileID: 8300000, guid: 68b8e6be057cbe1409600fd93ad95f50, type: 3}
-    volume: 0.45
+    volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -3130,7 +3130,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: alive
     clip: {fileID: 8300000, guid: 6a26b65675f10e046b5bc024da66d4d9, type: 3}
-    volume: 0.194
+    volume: 0.5
     pitch: 1
     loop: 0
     source: {fileID: 0}

@@ -62,8 +62,11 @@ public class PlayerControl : MonoBehaviour
         isThrowing = false;
         isMoving = false;
         currentHeight = ShootHeight.Low;
-        lowArmModel.SetActive(true);
-        highArmModel.SetActive(false);
+        if (lowArmModel != null && highArmModel != null)
+        {
+            lowArmModel.SetActive(true);
+            highArmModel.SetActive(false);
+        }
 
         // Try to find the CharacterController if necessary
         if (controller == null)
@@ -210,15 +213,21 @@ public class PlayerControl : MonoBehaviour
             {
                 currentHeight = ShootHeight.Low;
                 currentBall.transform.localPosition = lowPosition;
-                lowArmModel.SetActive(true);
-                highArmModel.SetActive(false);
+                if (lowArmModel != null && highArmModel != null)
+                {
+                    lowArmModel.SetActive(true);
+                    highArmModel.SetActive(false);
+                }
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow) && currentHeight == ShootHeight.Low)
             {
                 currentHeight = ShootHeight.High;
                 currentBall.transform.localPosition = highPosition;
-                lowArmModel.SetActive(false);
-                highArmModel.SetActive(true);
+                if (lowArmModel != null && highArmModel != null)
+                {
+                    lowArmModel.SetActive(false);
+                    highArmModel.SetActive(true);
+                }
             }
         }
     }
@@ -239,12 +248,12 @@ public class PlayerControl : MonoBehaviour
         throwScript.Throw(throwVector.normalized * throwSpeed);
 
         // Trigger the throwing animation
-        if (currentHeight == ShootHeight.High)
+        if (currentHeight == ShootHeight.High && highArmModel != null)
         {
             highArmAnimator.ResetTrigger("Throw");
             highArmAnimator.SetTrigger("Throw");
         }
-        else if (currentHeight == ShootHeight.Low)
+        else if (currentHeight == ShootHeight.Low && lowArmModel != null)
         {
             lowArmAnimator.ResetTrigger("Throw");
             lowArmAnimator.SetTrigger("Throw");
