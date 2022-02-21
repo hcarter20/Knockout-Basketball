@@ -145,7 +145,8 @@ public class NPCController : MonoBehaviour
         moveScript.movementEnabled = true;
 
         //egchan awake sound
-        audioManagement.instance.Play("alive");
+        if (audioManagement.instance != null)
+            audioManagement.instance.Play("alive");
 
         if (tutorial && tutorialManager.S != null)
             tutorialManager.S.Respawned();

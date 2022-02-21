@@ -1,6 +1,7 @@
 using UnityEngine.Audio;
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class audioManagement : MonoBehaviour
 {
@@ -35,6 +36,12 @@ public class audioManagement : MonoBehaviour
             Debug.LogWarning("Sound: "+ name + " not found");
             return;
         }
+        if (name.Equals("hitNPC3"))
+        {
+            float randPitch = Random.Range(0.95f, 1.3f);
+            s.source.pitch = randPitch;
+        }
+
         s.source.Play();
     }
 
